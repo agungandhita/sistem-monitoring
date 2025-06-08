@@ -45,15 +45,6 @@ class User extends Authenticatable
     ];
 
 
-    public function santri()
-    {
-        return $this->hasMany(Santri::class, 'user_id ','user_id');
-    }
-
-    public function kelas()
-    {
-        return $this->hasMany(Kelas::class, 'user_id', 'user_id');
-    }
     
 
     
