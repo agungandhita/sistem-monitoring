@@ -13,17 +13,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Get counts for dashboard statistics
-        // $totalSantri = User::where('role', 'wali')->count();
-        $totalGuru = User::where('role', 'guru')->count();
-        // $totalWali = Wali::count();
-        // $totalKelas = Kelas::count();
 
-        // Get recent nilai entries
-        // $recentNilai = Nilai::with(['user', 'kelas'])
-        //     ->orderBy('created_at', 'desc')
-        //     ->take(5)
-        //     ->get();
+        $totalGuru = User::where('role', 'guru')->count();
+      
 
         // Return view with dashboard data
         return view('admin.dashboard.index', compact(
