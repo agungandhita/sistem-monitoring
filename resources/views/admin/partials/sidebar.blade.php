@@ -93,7 +93,7 @@
                 </ul>
 
                 <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-white">
-                    <form action="#" method="POST">
+                    <form action="/logout" method="POST">
                         @csrf
                         <button type="submit"
                             class="text-gray-700 text-sm flex items-center cursor-pointer hover:bg-gray-50 rounded-md px-4 py-2.5 w-full transition-all">

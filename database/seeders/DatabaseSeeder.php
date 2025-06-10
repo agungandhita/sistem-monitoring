@@ -14,7 +14,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             MapelSeeder::class,
+            GuruSeeder::class,
             SiswaSeeder::class,
+            GuruMapelSeeder::class,
         ]);
     }
 }
