@@ -43,6 +43,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
     
+    // Relationship with Wali
+    public function wali()
+    {
+        return $this->hasOne(Wali::class, 'user_id', 'user_id');
+    }
 }

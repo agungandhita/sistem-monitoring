@@ -19,7 +19,6 @@
     {{-- </div> --}}
     @include('admin.partials.end')
     @include('sweetalert::alert')
-    
     <!-- Place this before closing body tag -->
     @yield('scripts')
 </html>

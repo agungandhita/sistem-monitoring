@@ -13,12 +13,26 @@ class Wali extends Model
     protected $primaryKey = "wali_id";
 
 
-    protected $guarded =[
-        'wali_id'
+    protected $fillable = [
+        'user_id',
+        'nama',
+        'alamat',
+        'telepon',
+        'pekerjaan',
+        'jenis_kelamin'
     ];
-
-    // public function santri()
-    // {
-    //     return $this->hasMany(Santri::class,'santri_id', 'wali_id');
-    // }
+    
+    // Relationship with User
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
+    
+    // Many-to-many relationship with Siswa
+    public function siswas()
+    {
+        return $this->belongsToMany(Siswa::class, 'wali_siswa', 'wali_id', 'siswa_id')
+                    ->withPivot('hubungan')
+                    ->withTimestamps();
+    }
 }
