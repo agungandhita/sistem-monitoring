@@ -23,7 +23,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('guru.index') }}"
+                        <a href="{{ route('admin.guru.index') }}"
                             class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -32,12 +32,21 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('mapel.index') }}"
+                        <a href="{{ route('admin.mapel.index') }}"
                             class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                             </svg>
                             <span>Mapel</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.guru-mapel.index') }}"
+                            class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                            </svg>
+                            <span>Guru Mapel</span>
                         </a>
                     </li>
                     <li>

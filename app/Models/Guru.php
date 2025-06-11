@@ -2,44 +2,51 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Guru extends Model
 {
-    protected $table = 'guru';
+    use HasFactory;
+    
+    protected $table = 'gurus';
     protected $primaryKey = 'guru_id';
-    protected $fillable = ['nuptk', 'nip', 'nama', 'jabatan', 'foto', 'email', 'password', 'jenis_kelamin', 'alamat', 'telepon'];
-
-    protected $hidden = ['password'];
-
-    protected $casts = [
-        'password' => 'hashed',
+    
+    protected $fillable = [
+        'nuptk',
+        'nip',
+        'nama',
+        'foto',
+        'alamat',
+        'tanggal_lahir',
+        'nomor_hp',
+        'email',
+        'password',
+        'jabatan',
+        'tahun_masuk'
     ];
-
-    /**
-     * Relasi many-to-many dengan Mapel melalui tabel pivot guru_mapel
-     */
-    public function mapels(): BelongsToMany
+    
+    protected $casts = [
+        'tanggal_lahir' => 'date'
+    ];
+    
+    protected $hidden = [
+        'password'
+    ];
+    
+    // Many-to-many relationship with Mapel through guru_mapel pivot table
+    public function mapels()
     {
         return $this->belongsToMany(Mapel::class, 'guru_mapel', 'guru_id', 'mapel_id')
-                    ->withPivot(['kelas', 'tahun_ajaran', 'status', 'catatan'])
+                    ->withPivot('kurikulum_id', 'kelas')
                     ->withTimestamps();
     }
-
-    /**
-     * Mendapatkan mapel aktif yang diajar guru
-     */
-    public function mapelsAktif(): BelongsToMany
+    
+    // Relationship through pivot table to get curriculum
+    public function kurikulums()
     {
-        return $this->mapels()->wherePivot('status', 'aktif');
-    }
-
-    /**
-     * Mendapatkan mapel berdasarkan tahun ajaran
-     */
-    public function mapelsByTahunAjaran($tahunAjaran): BelongsToMany
-    {
-        return $this->mapels()->wherePivot('tahun_ajaran', $tahunAjaran);
+        return $this->belongsToMany(Kurikulum::class, 'guru_mapel', 'guru_id', 'kurikulum_id')
+                    ->withPivot('mapel_id', 'kelas')
+                    ->withTimestamps();
     }
 }

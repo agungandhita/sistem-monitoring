@@ -3,6 +3,8 @@
 use App\Models\Nilai;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\GuruController;
+use App\Http\Controllers\Admin\MapelController;
+use App\Http\Controllers\Admin\GuruMapelController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\auth\RegisterController;
@@ -35,20 +37,7 @@ Route::middleware('admin')->group(function () {
 
     Route::get('/admin', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::resource('guru', App\Http\Controllers\Admin\GuruController::class);
-    
-    // Guru-Mapel Assignment Routes
-    Route::get('guru/{guru}/assign-mapel', [App\Http\Controllers\Admin\GuruController::class, 'assignMapel'])->name('guru.assign-mapel');
-    Route::post('guru/{guru}/assign-mapel', [App\Http\Controllers\Admin\GuruController::class, 'storeAssignMapel'])->name('guru.store-assign-mapel');
-    Route::delete('guru/{guru}/remove-assign-mapel', [App\Http\Controllers\Admin\GuruController::class, 'removeAssignMapel'])->name('guru.remove-assign-mapel');
-    Route::put('guru/{guru}/update-assign-mapel', [App\Http\Controllers\Admin\GuruController::class, 'updateAssignMapel'])->name('guru.update-assign-mapel');
-
-    Route::get('/mapel', [App\Http\Controllers\Admin\MapelController::class, 'index'])->name('mapel.index');
-    Route::post('/mapel/store', [App\Http\Controllers\Admin\MapelController::class, 'store'])->name('mapel.store');
-    Route::put('/mapel/{mapel}', [App\Http\Controllers\Admin\MapelController::class, 'update'])->name('mapel.update');
-    Route::delete('/mapel/{mapel}', [App\Http\Controllers\Admin\MapelController::class, 'destroy'])->name('mapel.destroy');
-
-    // Student Management Routes - PINDAHKAN ROUTE KHUSUS KE ATAS
+    // Student Management Routes - sudah konsisten
     Route::get('siswa/create-wali', [App\Http\Controllers\Admin\SiswaController::class, 'createWali'])->name('admin.siswa.create-wali');
     Route::post('siswa/store-wali', [App\Http\Controllers\Admin\SiswaController::class, 'storeWali'])->name('admin.siswa.store-wali');
     Route::get('siswa/get-walis', [App\Http\Controllers\Admin\SiswaController::class, 'getWalis'])->name('admin.siswa.get-walis');
@@ -61,9 +50,52 @@ Route::middleware('admin')->group(function () {
         'edit' => 'admin.siswa.edit',
         'update' => 'admin.siswa.update',
         'destroy' => 'admin.siswa.destroy'
-
     ]);
-
+    
+    // Subject Management Routes
+    Route::resource('mapel', App\Http\Controllers\Admin\MapelController::class)->names([
+        'index' => 'admin.mapel.index',
+        'create' => 'admin.mapel.create',
+        'store' => 'admin.mapel.store',
+        'show' => 'admin.mapel.show',
+        'edit' => 'admin.mapel.edit',
+        'update' => 'admin.mapel.update',
+        'destroy' => 'admin.mapel.destroy'
+    ]);
+    
+    // Teacher Management Routes
+    Route::resource('guru', App\Http\Controllers\Admin\GuruController::class)->names([
+        'index' => 'admin.guru.index',
+        'create' => 'admin.guru.create',
+        'store' => 'admin.guru.store',
+        'show' => 'admin.guru.show',
+        'edit' => 'admin.guru.edit',
+        'update' => 'admin.guru.update',
+        'destroy' => 'admin.guru.destroy'
+    ]);
+    
+    // Teacher-Subject Assignment Routes
+    Route::prefix('guru-mapel')->name('admin.guru-mapel.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\GuruMapelController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\GuruMapelController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\GuruMapelController::class, 'store'])->name('store');
+        Route::get('/{guru_id}', [App\Http\Controllers\Admin\GuruMapelController::class, 'show'])->name('show');
+        Route::get('/{guru_id}/{mapel_id}/{kurikulum_id}/{kelas}/edit', [App\Http\Controllers\Admin\GuruMapelController::class, 'edit'])->name('edit');
+        Route::put('/{guru_id}/{mapel_id}/{kurikulum_id}/{kelas}', [App\Http\Controllers\Admin\GuruMapelController::class, 'update'])->name('update');
+        Route::delete('/{guru_id}/{mapel_id}/{kurikulum_id}/{kelas}', [App\Http\Controllers\Admin\GuruMapelController::class, 'destroy'])->name('destroy');
+    });
+    
+    // Curriculum Management Routes
+    Route::resource('kurikulum', App\Http\Controllers\Admin\KurikulumController::class)->names([
+        'index' => 'admin.kurikulum.index',
+        'create' => 'admin.kurikulum.create',
+        'store' => 'admin.kurikulum.store',
+        'show' => 'admin.kurikulum.show',
+        'edit' => 'admin.kurikulum.edit',
+        'update' => 'admin.kurikulum.update',
+        'destroy' => 'admin.kurikulum.destroy'
+    ]);
+    
 });
 
 

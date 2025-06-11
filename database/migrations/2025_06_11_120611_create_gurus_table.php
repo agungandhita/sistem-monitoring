@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('guru', function (Blueprint $table) {
+        Schema::create('gurus', function (Blueprint $table) {
             $table->id('guru_id');
-            $table->string('nuptk', 16)->unique()->comment('Nomor Unik Pendidik dan Tenaga Kependidikan');
-            $table->string('nip', 18)->unique()->comment('Nomor Induk Pegawai');
+            $table->string('nuptk')->nullable()->unique();
+            $table->string('nip')->nullable()->unique();
             $table->string('nama');
-            $table->string('jabatan');
+            $table->enum('jenis_kelamin', ['laki-laki', 'perempuan']);
             $table->string('foto')->nullable();
+            $table->text('alamat');
+            $table->date('tanggal_lahir');
+            $table->string('nomor_hp');
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('jenis_kelamin', ['L', 'P']);
-            $table->text('alamat');
-            $table->string('telepon', 20)->nullable();
+            $table->string('jabatan');
+            $table->string('tahun_masuk');
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('guru');
+        Schema::dropIfExists('gurus');
     }
 };

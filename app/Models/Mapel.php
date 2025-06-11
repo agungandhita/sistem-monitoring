@@ -2,47 +2,35 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Mapel extends Model
 {
-    protected $table = 'mapel';
+    use HasFactory;
+    
+    protected $table = 'mapels';
     protected $primaryKey = 'mapel_id';
-
-    protected $fillable = ['kode_mapel', 'nama_mapel', 'deskripsi'];
-
-    /**
-     * Relasi many-to-many dengan Guru melalui tabel pivot guru_mapel
-     */
-    public function gurus(): BelongsToMany
+    
+    protected $fillable = [
+        'kode_mapel',
+        'mapel',
+        'deskripsi'
+    ];
+    
+    // Many-to-many relationship with Guru through guru_mapel pivot table
+    public function gurus()
     {
         return $this->belongsToMany(Guru::class, 'guru_mapel', 'mapel_id', 'guru_id')
-                    ->withPivot(['kelas', 'tahun_ajaran', 'status', 'catatan'])
+                    ->withPivot('kurikulum_id', 'kelas')
                     ->withTimestamps();
     }
-
-    /**
-     * Mendapatkan guru aktif yang mengajar mapel ini
-     */
-    public function gurusAktif(): BelongsToMany
+    
+    // Relationship through pivot table to get curriculum
+    public function kurikulums()
     {
-        return $this->gurus()->wherePivot('status', 'aktif');
-    }
-
-    /**
-     * Mendapatkan guru berdasarkan tahun ajaran
-     */
-    public function gurusByTahunAjaran($tahunAjaran): BelongsToMany
-    {
-        return $this->gurus()->wherePivot('tahun_ajaran', $tahunAjaran);
-    }
-
-    /**
-     * Mendapatkan guru berdasarkan kelas
-     */
-    public function gurusByKelas($kelas): BelongsToMany
-    {
-        return $this->gurus()->wherePivot('kelas', $kelas);
+        return $this->belongsToMany(Kurikulum::class, 'guru_mapel', 'mapel_id', 'kurikulum_id')
+                    ->withPivot('guru_id', 'kelas')
+                    ->withTimestamps();
     }
 }
