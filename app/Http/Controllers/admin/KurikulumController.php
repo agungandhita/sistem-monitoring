@@ -56,7 +56,9 @@ class KurikulumController extends Controller
     public function show(Kurikulum $kurikulum)
     {
         $kurikulum->load('gurus', 'mapels');
-        return view('admin.kurikulum.show', compact('kurikulum'));
+        $gurus = $kurikulum->gurus;
+        $mapels = $kurikulum->mapels;
+        return view('admin.kurikulum.show', compact('kurikulum', 'gurus', 'mapels'));
     }
 
     /**

@@ -225,4 +225,21 @@ class SiswaController extends Controller
         $walis = Wali::with('user')->get();
         return response()->json($walis);
     }
+
+    /**
+     * Get available students for AJAX (students not in any active rombel)
+     */
+    public function available()
+    {
+        $siswas = Siswa::where('status', 'aktif')
+            ->whereDoesntHave('rombels', function($query) {
+                $query->where('status', 'aktif')
+                      ->where('tahun_ajaran', date('Y') . '/' . (date('Y') + 1));
+            })
+            ->select('siswa_id', 'nama_lengkap', 'nisn')
+            ->orderBy('nama_lengkap')
+            ->get();
+        
+        return response()->json($siswas);
+    }
 }

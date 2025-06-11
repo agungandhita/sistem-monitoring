@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             MapelSeeder::class,
             KurikulumSeeder::class,
             GuruMapelSeeder::class,
+            KelasSeeder::class,
+            RombelSeeder::class,
         ]);
     }
 }
