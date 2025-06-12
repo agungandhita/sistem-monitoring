@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Mapel;
+use App\Models\Kurikulum;
 
 class MapelSeeder extends Seeder
 {
@@ -13,56 +14,44 @@ class MapelSeeder extends Seeder
      */
     public function run(): void
     {
+        // Ambil kurikulum pertama sebagai default
+        $kurikulum = Kurikulum::first();
+        
+        if (!$kurikulum) {
+            $this->command->warn('Tidak ada kurikulum yang tersedia. Jalankan KurikulumSeeder terlebih dahulu.');
+            return;
+        }
+
         $mapels = [
             [
+                'kurikulum_id' => $kurikulum->kurikulum_id,
                 'kode_mapel' => 'MTK',
                 'mapel' => 'Matematika',
-                'deskripsi' => 'Mata pelajaran matematika untuk semua tingkat'
+                'deskripsi' => 'Mata pelajaran yang mempelajari tentang angka, ruang, dan struktur'
             ],
             [
+                'kurikulum_id' => $kurikulum->kurikulum_id,
+                'kode_mapel' => 'IPA',
+                'mapel' => 'Ilmu Pengetahuan Alam',
+                'deskripsi' => 'Mata pelajaran yang mempelajari tentang alam dan fenomena-fenomenanya'
+            ],
+            [
+                'kurikulum_id' => $kurikulum->kurikulum_id,
+                'kode_mapel' => 'IPS',
+                'mapel' => 'Ilmu Pengetahuan Sosial',
+                'deskripsi' => 'Mata pelajaran yang mempelajari tentang masyarakat dan lingkungan sosial'
+            ],
+            [
+                'kurikulum_id' => $kurikulum->kurikulum_id,
                 'kode_mapel' => 'BIN',
                 'mapel' => 'Bahasa Indonesia',
-                'deskripsi' => 'Mata pelajaran bahasa Indonesia'
+                'deskripsi' => 'Mata pelajaran bahasa nasional Indonesia'
             ],
             [
-                'kode_mapel' => 'BING',
+                'kurikulum_id' => $kurikulum->kurikulum_id,
+                'kode_mapel' => 'ENG',
                 'mapel' => 'Bahasa Inggris',
-                'deskripsi' => 'Mata pelajaran bahasa Inggris'
-            ],
-            [
-                'kode_mapel' => 'FIS',
-                'mapel' => 'Fisika',
-                'deskripsi' => 'Mata pelajaran fisika untuk tingkat SMA'
-            ],
-            [
-                'kode_mapel' => 'KIM',
-                'mapel' => 'Kimia',
-                'deskripsi' => 'Mata pelajaran kimia untuk tingkat SMA'
-            ],
-            [
-                'kode_mapel' => 'BIO',
-                'mapel' => 'Biologi',
-                'deskripsi' => 'Mata pelajaran biologi untuk tingkat SMA'
-            ],
-            [
-                'kode_mapel' => 'SEJ',
-                'mapel' => 'Sejarah',
-                'deskripsi' => 'Mata pelajaran sejarah Indonesia dan dunia'
-            ],
-            [
-                'kode_mapel' => 'GEO',
-                'mapel' => 'Geografi',
-                'deskripsi' => 'Mata pelajaran geografi'
-            ],
-            [
-                'kode_mapel' => 'EKO',
-                'mapel' => 'Ekonomi',
-                'deskripsi' => 'Mata pelajaran ekonomi untuk tingkat SMA'
-            ],
-            [
-                'kode_mapel' => 'SOS',
-                'mapel' => 'Sosiologi',
-                'deskripsi' => 'Mata pelajaran sosiologi'
+                'deskripsi' => 'Mata pelajaran bahasa internasional'
             ]
         ];
 

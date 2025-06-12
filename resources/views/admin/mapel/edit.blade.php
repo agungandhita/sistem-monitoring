@@ -17,6 +17,23 @@
             </div>
             
             <div>
+                <label for="kurikulum_id" class="block text-sm font-medium text-gray-700 mb-2">Kurikulum *</label>
+                <select name="kurikulum_id" id="kurikulum_id" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('kurikulum_id') border-red-500 @enderror" required>
+                    <option value="">Pilih Kurikulum</option>
+                    @foreach($kurikulums as $kurikulum)
+                        <option value="{{ $kurikulum->kurikulum_id }}" 
+                                {{ (old('kurikulum_id', $mapel->kurikulum_id) == $kurikulum->kurikulum_id) ? 'selected' : '' }}>
+                            {{ $kurikulum->nama_kurikulum }} - {{ $kurikulum->tahun_ajaran }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('kurikulum_id')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <div>
                 <label for="kode_mapel" class="block text-sm font-medium text-gray-700 mb-2">Kode Mata Pelajaran *</label>
                 <input type="text" name="kode_mapel" id="kode_mapel" value="{{ old('kode_mapel', $mapel->kode_mapel) }}" 
                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('kode_mapel') border-red-500 @enderror" 

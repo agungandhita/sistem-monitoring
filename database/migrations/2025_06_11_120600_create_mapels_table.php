@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('kode_mapel')->unique();
             $table->string('mapel');
             $table->text('deskripsi')->nullable();
+            $table->foreignId('kurikulum_id')->constrained('kurikulums', 'kurikulum_id')->onDelete('cascade');
             $table->timestamps();
         });
     }

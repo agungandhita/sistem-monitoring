@@ -21,45 +21,42 @@ class GuruMapelSeeder extends Seeder
         $kurikulums = Kurikulum::all();
         
         if ($gurus->count() > 0 && $mapels->count() > 0 && $kurikulums->count() > 0) {
+            // Ambil mapel berdasarkan kode untuk memastikan ID yang benar
+            $matematika = $mapels->where('kode_mapel', 'MTK')->first();
+            $ipa = $mapels->where('kode_mapel', 'IPA')->first();
+            $ips = $mapels->where('kode_mapel', 'IPS')->first();
+            $bahasaIndonesia = $mapels->where('kode_mapel', 'BIN')->first();
+            $bahasaInggris = $mapels->where('kode_mapel', 'ENG')->first();
+            
             // Contoh penugasan guru ke mata pelajaran
-            $assignments = [
-                [
-                    'guru_id' => 1, // Dr. Ahmad Hidayat (Matematika)
-                    'mapel_id' => 1, // Matematika
-                    'kurikulum_id' => 1, // Kurikulum 2013
-                    'kelas' => 'X'
-                ],
-                [
-                    'guru_id' => 1,
-                    'mapel_id' => 1,
-                    'kurikulum_id' => 1,
-                    'kelas' => 'XI'
-                ],
-                [
-                    'guru_id' => 2, // Siti Nurhaliza (Bahasa Indonesia)
-                    'mapel_id' => 2, // Bahasa Indonesia
-                    'kurikulum_id' => 2, // Kurikulum Merdeka
-                    'kelas' => 'X'
-                ],
-                [
-                    'guru_id' => 3, // Budi Santoso (Fisika)
-                    'mapel_id' => 4, // Fisika
-                    'kurikulum_id' => 1,
-                    'kelas' => 'XI'
-                ],
-                [
-                    'guru_id' => 4, // Rina Kartika (Kimia)
-                    'mapel_id' => 5, // Kimia
-                    'kurikulum_id' => 1,
-                    'kelas' => 'XII'
-                ],
-                [
-                    'guru_id' => 5, // Dedi Kurniawan (Biologi)
-                    'mapel_id' => 6, // Biologi
-                    'kurikulum_id' => 2,
-                    'kelas' => 'X'
-                ]
-            ];
+            $assignments = [];
+            
+            if ($matematika && $gurus->count() >= 1) {
+                $assignments[] = [
+                    'guru_id' => $gurus->first()->guru_id,
+                    'mapel_id' => $matematika->mapel_id,
+                    'kurikulum_id' => $kurikulums->first()->kurikulum_id,
+                    'kelas' => '1'
+                ];
+            }
+            
+            if ($bahasaIndonesia && $gurus->count() >= 2) {
+                $assignments[] = [
+                    'guru_id' => $gurus->skip(1)->first()->guru_id,
+                    'mapel_id' => $bahasaIndonesia->mapel_id,
+                    'kurikulum_id' => $kurikulums->first()->kurikulum_id,
+                    'kelas' => '2'
+                ];
+            }
+            
+            if ($ipa && $gurus->count() >= 3) {
+                $assignments[] = [
+                    'guru_id' => $gurus->skip(2)->first()->guru_id,
+                    'mapel_id' => $ipa->mapel_id,
+                    'kurikulum_id' => $kurikulums->first()->kurikulum_id,
+                    'kelas' => '3'
+                ];
+            }
 
             foreach ($assignments as $assignment) {
                 $guru = Guru::find($assignment['guru_id']);

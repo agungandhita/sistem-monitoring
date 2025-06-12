@@ -135,6 +135,7 @@
                 @php $no = ($gurus->currentPage() - 1) * $gurus->perPage() + 1; @endphp
                 @forelse($gurus as $guru)
                     @forelse($guru->mapels as $mapel)
+                    {{-- @dd($mapel) --}}
                         <tr class="hover:bg-gray-50 transition duration-200" data-guru="{{ strtolower($guru->nama) }}" data-mapel="{{ strtolower($mapel->mapel) }}" data-kelas="{{ $mapel->pivot->kelas }}" data-jabatan="{{ strtolower($guru->jabatan) }}">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $no++ }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -166,10 +167,12 @@
                                 <div class="text-sm text-gray-500">{{ $mapel->kode_mapel }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if($mapel->pivot->kurikulum)
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        {{ $mapel->pivot->kurikulum->nama_kurikulum }}
-                                    </span>
+                                @if($mapel->kurikulums)
+                                    @foreach($mapel->kurikulums as $kurikulum)
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            {{ $kurikulum->nama_kurikulum }}
+                                        </span>
+                                    @endforeach
                                 @else
                                     <span class="text-gray-400">-</span>
                                 @endif

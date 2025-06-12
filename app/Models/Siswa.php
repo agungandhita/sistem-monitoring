@@ -21,6 +21,7 @@ class Siswa extends Model
         'alamat',
         'telepon',
         'kelas',
+        'nama_kelas',
         'tahun_masuk',
         'status',
         'catatan'
@@ -38,59 +39,28 @@ class Siswa extends Model
                     ->withTimestamps();
     }
     
-    // Many-to-many relationship with Rombel through rombel_siswa pivot table
-    public function rombels()
+    // Relationship with Kelas (Many-to-One)
+    public function kelas()
     {
-        return $this->belongsToMany(Rombel::class, 'rombel_siswa', 'siswa_id', 'rombel_id')
-                    ->withPivot('tahun_ajaran', 'tanggal_masuk', 'tanggal_keluar', 'status', 'keterangan')
-                    ->withTimestamps();
-    }
-    
-    // Get current active rombel
-    public function currentRombel($tahunAjaran = null)
-    {
-        $query = $this->rombels()->wherePivot('status', 'aktif');
-        
-        if ($tahunAjaran) {
-            $query->wherePivot('tahun_ajaran', $tahunAjaran);
-        }
-        
-        return $query->first();
-    }
-    
-    // Get schedule for current rombel
-    public function getSchedule($tahunAjaran = null)
-    {
-        $rombel = $this->currentRombel($tahunAjaran);
-        
-        if (!$rombel) {
-            return collect();
-        }
-        
-        return $rombel->weeklySchedule()->get();
-    }
-    
-    // Check if student is assigned to any rombel for academic year
-    public function hasRombelForYear($tahunAjaran)
-    {
-        return $this->rombels()
-                    ->wherePivot('tahun_ajaran', $tahunAjaran)
-                    ->wherePivot('status', 'aktif')
-                    ->exists();
-    }
-    
-    // Scope for students without rombel assignment
-    public function scopeWithoutRombel($query, $tahunAjaran)
-    {
-        return $query->whereDoesntHave('rombels', function ($q) use ($tahunAjaran) {
-            $q->where('tahun_ajaran', $tahunAjaran)
-              ->where('status', 'aktif');
-        });
+        return $this->belongsTo(Kelas::class, 'nama_kelas', 'nama_kelas')
+                    ->where('tingkat', $this->kelas);
     }
     
     // Scope for students in specific grade
     public function scopeInGrade($query, $tingkat)
     {
-        return $query->where('kelas', 'like', $tingkat . '%');
+        return $query->where('kelas', $tingkat);
+    }
+    
+    // Scope for students without class assignment
+    public function scopeWithoutClass($query)
+    {
+        return $query->whereNull('nama_kelas');
+    }
+    
+    // Scope for active students
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'aktif');
     }
 }

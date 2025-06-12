@@ -86,6 +86,7 @@ Route::middleware('admin')->group(function () {
         Route::delete('/{guru_id}/{mapel_id}/{kurikulum_id}/{kelas}', [App\Http\Controllers\Admin\GuruMapelController::class, 'destroy'])->name('destroy');
     });
     
+
     // Curriculum Management Routes
     Route::resource('kurikulum', App\Http\Controllers\Admin\KurikulumController::class)->names([
         'index' => 'admin.kurikulum.index',
@@ -96,49 +97,9 @@ Route::middleware('admin')->group(function () {
         'update' => 'admin.kurikulum.update',
         'destroy' => 'admin.kurikulum.destroy'
     ]);
-    
-    // Class Management Routes
-    Route::resource('kelas', App\Http\Controllers\Admin\KelasController::class)->names([
-        'index' => 'admin.kelas.index',
-        'create' => 'admin.kelas.create',
-        'store' => 'admin.kelas.store',
-        'show' => 'admin.kelas.show',
-        'edit' => 'admin.kelas.edit',
-        'update' => 'admin.kelas.update',
-        'destroy' => 'admin.kelas.destroy'
-    ]);
-    
-    // Rombel Management Routes
-    Route::resource('rombel', App\Http\Controllers\Admin\RombelController::class)->names([
-        'index' => 'admin.rombel.index',
-        'create' => 'admin.rombel.create',
-        'store' => 'admin.rombel.store',
-        'show' => 'admin.rombel.show',
-        'edit' => 'admin.rombel.edit',
-        'update' => 'admin.rombel.update',
-        'destroy' => 'admin.rombel.destroy'
-    ]);
-    
-    // Rombel Student Management
-    Route::post('rombel/{rombel}/add-student', [App\Http\Controllers\Admin\RombelController::class, 'addStudent'])->name('admin.rombel.add-student');
-    Route::delete('rombel/{rombel}/remove-student/{siswa}', [App\Http\Controllers\Admin\RombelController::class, 'removeStudent'])->name('admin.rombel.remove-student');
-    
-    // Daily Schedule Management Routes
-    Route::resource('jadwal-harian', App\Http\Controllers\Admin\JadwalHarianController::class)->names([
-        'index' => 'admin.jadwal-harian.index',
-        'create' => 'admin.jadwal-harian.create',
-        'store' => 'admin.jadwal-harian.store',
-        'show' => 'admin.jadwal-harian.show',
-        'edit' => 'admin.jadwal-harian.edit',
-        'update' => 'admin.jadwal-harian.update',
-        'destroy' => 'admin.jadwal-harian.destroy'
-    ]);
-    
-    // Schedule Views
-    Route::get('rombel/{rombel}/jadwal-mingguan', [App\Http\Controllers\Admin\JadwalHarianController::class, 'getWeeklySchedule'])->name('admin.rombel.jadwal-mingguan');
-    Route::get('guru/{guru}/jadwal', [App\Http\Controllers\Admin\JadwalHarianController::class, 'getTeacherSchedule'])->name('admin.guru.jadwal');
-    Route::post('jadwal-harian/bulk-store', [App\Http\Controllers\Admin\JadwalHarianController::class, 'bulkStore'])->name('admin.jadwal-harian.bulk-store');
-    
+ 
+
+   
     // AJAX Routes
     Route::get('siswa/available', [App\Http\Controllers\Admin\SiswaController::class, 'available'])->name('admin.siswa.available');
     

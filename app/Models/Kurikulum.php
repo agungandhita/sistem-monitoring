@@ -17,6 +17,12 @@ class Kurikulum extends Model
         'tahun_ajaran'
     ];
     
+    // Direct relationship with Mapel
+    public function mapels()
+    {
+        return $this->hasMany(Mapel::class, 'kurikulum_id', 'kurikulum_id');
+    }
+    
     // Relationship through pivot table to get gurus
     public function gurus()
     {
@@ -25,8 +31,8 @@ class Kurikulum extends Model
                     ->withTimestamps();
     }
     
-    // Relationship through pivot table to get mapels
-    public function mapels()
+    // Relationship through pivot table to get mapels (for backward compatibility)
+    public function mapelsPivot()
     {
         return $this->belongsToMany(Mapel::class, 'guru_mapel', 'kurikulum_id', 'mapel_id')
                     ->withPivot('guru_id', 'kelas')

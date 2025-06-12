@@ -13,14 +13,22 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            UserSeeder::class,
-            SiswaSeeder::class,
-            GuruSeeder::class,
-            MapelSeeder::class,
-            KurikulumSeeder::class,
-            GuruMapelSeeder::class,
-            KelasSeeder::class,
-            RombelSeeder::class,
+            // 1. TAHAP SETUP AWAL
+            UserSeeder::class,          // Admin user
+            
+            // 2. TAHAP DATA MASTER (Urutan penting!)
+            // KurikulumSeeder::class,     // Kurikulum HARUS duluan
+            // MapelSeeder::class,      
+            // GuruMapelSeeder::class,     // Mapel butuh Kurikulum
+            // KelasSeeder::class,         // Kelas untuk pengelompokan
+            
+            // 3. TAHAP SDM
+            // WaliSeeder::class,       // Wali HARUS duluan (belum ada)
+            // SiswaSeeder::class,         // Siswa butuh Wali & Kelas
+            // GuruSeeder::class,          // Guru bisa bersamaan
+            
+            // 4. TAHAP ASSIGNMENT
+              // Assignment butuh Guru, Mapel, Kurikulum
         ]);
     }
 }

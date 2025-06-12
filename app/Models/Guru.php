@@ -38,7 +38,7 @@ class Guru extends Model
     public function mapels()
     {
         return $this->belongsToMany(Mapel::class, 'guru_mapel', 'guru_id', 'mapel_id')
-                    ->withPivot('kurikulum_id', 'kelas')
+                    ->withPivot('kurikulum_id')
                     ->withTimestamps();
     }
     
@@ -46,7 +46,7 @@ class Guru extends Model
     public function kurikulums()
     {
         return $this->belongsToMany(Kurikulum::class, 'guru_mapel', 'guru_id', 'kurikulum_id')
-                    ->withPivot('mapel_id', 'kelas')
+                    ->withPivot('mapel_id')
                     ->withTimestamps();
     }
 }

@@ -43,6 +43,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Mapel</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Mata Pelajaran</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kurikulum</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guru Pengampu</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
@@ -68,6 +69,16 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="text-sm font-medium text-gray-900">{{ $mapel->mapel }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        @if($mapel->kurikulum)
+                            <span class="px-2 py-1 text-xs bg-purple-100 text-purple-800 rounded-full">
+                                {{ $mapel->kurikulum->nama_kurikulum }}
+                            </span>
+                            <div class="text-xs text-gray-400 mt-1">{{ $mapel->kurikulum->tahun_ajaran }}</div>
+                        @else
+                            <span class="text-gray-400 italic">Belum ada kurikulum</span>
+                        @endif
                     </td>
                     <td class="px-6 py-4">
                         <div class="text-sm text-gray-900">

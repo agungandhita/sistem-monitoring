@@ -165,7 +165,7 @@
                         <h4 class="text-sm font-medium text-gray-700 mb-2">Guru</h4>
                         <div class="bg-white rounded-lg p-4 shadow-sm">
                             <div class="flex items-center space-x-3">
-                                <img id="previewGuruFoto" src="" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-gray-200" style="display: none;">
+                                <img id="previewGuruFoto" src="{{ asset('/storage/uploads/guru/' . $guru->foto) }}" alt="" class="w-12 h-12 rounded-full object-cover border-2 border-gray-200" style="display: none;">
                                 <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center" id="previewGuruIcon">
                                     <i class="fas fa-user text-gray-500"></i>
                                 </div>
