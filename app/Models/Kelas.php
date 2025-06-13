@@ -20,7 +20,10 @@ class Kelas extends Model
         'kapasitas',
         'status'
     ];
-    
+    public function getRouteKeyName()
+    {
+        return 'kelas_id'; // Sesuaikan dengan primary key Anda
+    }
     // Relationship with Kurikulum (Many-to-One)
     public function kurikulum()
     {

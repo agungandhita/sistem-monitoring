@@ -161,7 +161,7 @@
                             </div>
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-800">{{ $siswa->nama }}</p>
-                                <p class="text-xs text-gray-500">NIS: {{ $siswa->nis }} | Kelas {{ $siswa->kelas }}</p>
+                                <p class="text-xs text-gray-500">NIS: {{ $siswa->nis }} | Kelas {{ $siswa->kelas->nama_kelas ?? 'Belum ada kelas' }}</p>
                             </div>
                         </div>
                         @empty

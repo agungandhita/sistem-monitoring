@@ -38,12 +38,12 @@
             </div>
             <div>
                 <span class="text-yellow-700 font-medium">Kelas:</span>
-                <div class="text-yellow-900">{{ $kelas->nama_kelas }}</div>
+                <div class="text-yellow-900">{{ $currentKelas->nama_kelas }}</div>
             </div>
         </div>
     </div>
 
-    <form action="{{ route('admin.guru-mapel.update', [$guru->guru_id, $mapel->mapel_id, $kurikulum->kurikulum_id, $kelas]) }}" method="POST" id="editForm">
+    <form action="{{ route('admin.guru-mapel.update', [$guru->guru_id, $mapel->mapel_id, $kurikulum->kurikulum_id, $currentKelas->kelas_id]) }}" method="POST" id="editForm">
         @csrf
         @method('PUT')
         
@@ -114,47 +114,55 @@
                         </div>
                     </div>
 
-                    <!-- Curriculum and Class -->
-                    <div class="bg-gray-50 p-6 rounded-lg">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">
-                            <i class="fas fa-graduation-cap mr-2"></i>Kurikulum & Kelas Baru
-                        </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="new_kurikulum_id" class="block text-sm font-medium text-gray-700 mb-2">Kurikulum <span class="text-red-500">*</span></label>
-                                <select name="new_kurikulum_id" id="new_kurikulum_id" required 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('new_kurikulum_id') border-red-500 @enderror">
-                                    <option value="">Pilih Kurikulum</option>
-                                    @foreach($kurikulums as $k)
-                                        <option value="{{ $k->kurikulum_id }}" 
-                                                {{ (old('new_kurikulum_id', $kurikulum->kurikulum_id) == $k->kurikulum_id) ? 'selected' : '' }}
-                                                data-nama="{{ $k->nama_kurikulum }}" 
-                                                data-tahun="{{ $k->tahun_ajaran }}">
-                                            {{ $k->nama_kurikulum }} ({{ $k->tahun_ajaran }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('new_kurikulum_id')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div>
-                                <label for="new_kelas_id" class="block text-sm font-medium text-gray-700 mb-2">Kelas <span class="text-red-500">*</span></label>
-                                <select name="new_kelas_id" id="new_kelas_id" required 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('new_kelas_id') border-red-500 @enderror">
-                                    <option value="">Pilih Kelas</option>
-                                    @foreach($kelas as $k)
-                                        <option value="{{ $k->kelas_id }}" {{ (old('new_kelas_id', $currentKelas->kelas_id ?? '') == $k->kelas_id) ? 'selected' : '' }}>
-                                            {{ $k->nama_kelas }} - {{ $k->tingkat }} ({{ $k->kurikulum->nama_kurikulum }})
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('new_kelas_id')
-                                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
+                  <!-- Kurikulum & Kelas -->
+<div class="bg-gray-50 p-6 rounded-lg">
+    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+        <i class="fas fa-graduation-cap mr-2"></i>Kurikulum & Kelas Baru
+    </h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Kurikulum Select -->
+        <div>
+            <label for="new_kurikulum_id" class="block text-sm font-medium text-gray-700 mb-2">
+                Kurikulum <span class="text-red-500">*</span>
+            </label>
+            <select name="new_kurikulum_id" id="new_kurikulum_id" required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('new_kurikulum_id') border-red-500 @enderror">
+                <option value="">Pilih Kurikulum</option>
+                @foreach($kurikulums as $k)
+                    <option value="{{ $k->kurikulum_id }}"
+                        {{ (old('new_kurikulum_id', $kurikulum->kurikulum_id ?? '') == $k->kurikulum_id) ? 'selected' : '' }}>
+                        {{ $k->nama_kurikulum }} ({{ $k->tahun_ajaran }})
+                    </option>
+                @endforeach
+            </select>
+            @error('new_kurikulum_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Kelas Select -->
+        <div>
+            <label for="new_kelas_id" class="block text-sm font-medium text-gray-700 mb-2">
+                Kelas <span class="text-red-500">*</span>
+            </label>
+            <select name="new_kelas_id" id="new_kelas_id" required
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('new_kelas_id') border-red-500 @enderror">
+                <option value="">Pilih Kelas</option>
+                @foreach($kelas as $k)
+                    <option value="{{ $k->kelas_id }}"
+                        data-kurikulum="{{ $k->kurikulum_id }}"
+                        {{ (old('new_kelas_id', $currentKelas->kelas_id ?? '') == $k->kelas_id) ? 'selected' : '' }}>
+                        {{ $k->nama_kelas }} - Tingkat {{ $k->tingkat }} ({{ $k->kurikulum->nama_kurikulum }})
+                    </option>
+                @endforeach
+            </select>
+            @error('new_kelas_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+    </div>
+</div>
 
                     <!-- Submit Buttons -->
                     <div class="flex justify-end space-x-3 pt-6 border-t">
@@ -248,7 +256,6 @@
 
 @section('scripts')
 <script>
-    // Store original values
     const originalValues = {
         guru_id: '{{ $guru->guru_id }}',
         guru_nama: '{{ $guru->nama }}',
@@ -256,124 +263,84 @@
         mapel_nama: '{{ $mapel->mapel }}',
         kurikulum_id: '{{ $kurikulum->kurikulum_id }}',
         kurikulum_nama: '{{ $kurikulum->nama_kurikulum }}',
-        kelas: '{{ $kelas }}'
+        kelas: '{{ $currentKelas->nama_kelas }} - {{ $currentKelas->tingkat }} ({{ $kurikulum->nama_kurikulum }})'
     };
 
-    // Update preview when guru is selected
     document.getElementById('new_guru_id').addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        
-        if (this.value) {
-            const nama = selectedOption.getAttribute('data-nama');
-            const nip = selectedOption.getAttribute('data-nip');
-            const nuptk = selectedOption.getAttribute('data-nuptk');
-            const jabatan = selectedOption.getAttribute('data-jabatan');
-            const foto = selectedOption.getAttribute('data-foto');
-            
-            document.getElementById('previewGuruNama').textContent = nama;
-            document.getElementById('previewGuruNip').textContent = nip ? `NIP: ${nip}` : (nuptk ? `NUPTK: ${nuptk}` : '-');
-            document.getElementById('previewGuruJabatan').textContent = jabatan;
-            
-            if (foto) {
-                document.getElementById('previewGuruFoto').src = foto;
-                document.getElementById('previewGuruFoto').style.display = 'block';
-                document.getElementById('previewGuruIcon').style.display = 'none';
-            } else {
-                document.getElementById('previewGuruFoto').style.display = 'none';
-                document.getElementById('previewGuruIcon').style.display = 'flex';
-            }
+        const opt = this.options[this.selectedIndex];
+        document.getElementById('previewGuruNama').textContent = opt.getAttribute('data-nama');
+        document.getElementById('previewGuruNip').textContent = opt.getAttribute('data-nip') ? `NIP: ${opt.getAttribute('data-nip')}` : (opt.getAttribute('data-nuptk') ? `NUPTK: ${opt.getAttribute('data-nuptk')}` : '-');
+        document.getElementById('previewGuruJabatan').textContent = opt.getAttribute('data-jabatan');
+
+        const foto = opt.getAttribute('data-foto');
+        if (foto) {
+            document.getElementById('previewGuruFoto').src = foto;
+            document.getElementById('previewGuruFoto').style.display = 'block';
+            document.getElementById('previewGuruIcon').style.display = 'none';
+        } else {
+            document.getElementById('previewGuruFoto').style.display = 'none';
+            document.getElementById('previewGuruIcon').style.display = 'flex';
         }
         updateChangesSummary();
     });
 
-    // Update preview when mapel is selected
     document.getElementById('new_mapel_id').addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        
-        if (this.value) {
-            const nama = selectedOption.getAttribute('data-nama');
-            const kode = selectedOption.getAttribute('data-kode');
-            const deskripsi = selectedOption.getAttribute('data-deskripsi');
-            
-            document.getElementById('previewMapelNama').textContent = nama;
-            document.getElementById('previewMapelKode').textContent = kode;
-            document.getElementById('previewMapelDeskripsi').textContent = deskripsi || 'Tidak ada deskripsi';
-        }
+        const opt = this.options[this.selectedIndex];
+        document.getElementById('previewMapelNama').textContent = opt.getAttribute('data-nama');
+        document.getElementById('previewMapelKode').textContent = opt.getAttribute('data-kode');
+        document.getElementById('previewMapelDeskripsi').textContent = opt.getAttribute('data-deskripsi') || 'Tidak ada deskripsi';
         updateChangesSummary();
     });
 
-    // Update preview when kurikulum is selected
     document.getElementById('new_kurikulum_id').addEventListener('change', function() {
-        const selectedOption = this.options[this.selectedIndex];
-        
-        if (this.value) {
-            const nama = selectedOption.getAttribute('data-nama');
-            const tahun = selectedOption.getAttribute('data-tahun');
-            
-            document.getElementById('previewKurikulumNama').textContent = nama;
-            document.getElementById('previewKurikulumTahun').textContent = tahun;
-        }
+        const opt = this.options[this.selectedIndex];
+        document.getElementById('previewKurikulumNama').textContent = opt.getAttribute('data-nama');
+        document.getElementById('previewKurikulumTahun').textContent = opt.getAttribute('data-tahun');
         updateChangesSummary();
     });
 
-    // Update preview when kelas is selected
-    document.getElementById('new_kelas').addEventListener('change', function() {
-        if (this.value) {
-            document.getElementById('previewKelas').textContent = this.value;
-        }
+    document.getElementById('new_kelas_id').addEventListener('change', function() {
+        const opt = this.options[this.selectedIndex];
+        document.getElementById('previewKelas').textContent = opt.text;
         updateChangesSummary();
     });
 
     function updateChangesSummary() {
         const changes = [];
-        
         const newGuruId = document.getElementById('new_guru_id').value;
         const newMapelId = document.getElementById('new_mapel_id').value;
         const newKurikulumId = document.getElementById('new_kurikulum_id').value;
-        const newKelas = document.getElementById('new_kelas').value;
-        
+        const newKelasEl = document.getElementById('new_kelas_id');
+        const newKelasVal = newKelasEl.value;
+        const newKelasText = newKelasEl.options[newKelasEl.selectedIndex]?.text || '';
+
         if (newGuruId && newGuruId !== originalValues.guru_id) {
-            const guruNama = document.getElementById('new_guru_id').options[document.getElementById('new_guru_id').selectedIndex].getAttribute('data-nama');
-            changes.push(`<div class="text-blue-600">• Guru: ${originalValues.guru_nama} → ${guruNama}</div>`);
+            const nama = newKelasEl.form.querySelector('#new_guru_id option:checked').getAttribute('data-nama');
+            changes.push(`<div class="text-blue-600">• Guru: ${originalValues.guru_nama} → ${nama}</div>`);
         }
-        
         if (newMapelId && newMapelId !== originalValues.mapel_id) {
-            const mapelNama = document.getElementById('new_mapel_id').options[document.getElementById('new_mapel_id').selectedIndex].getAttribute('data-nama');
-            changes.push(`<div class="text-blue-600">• Mata Pelajaran: ${originalValues.mapel_nama} → ${mapelNama}</div>`);
+            const nama = document.querySelector('#new_mapel_id option:checked').getAttribute('data-nama');
+            changes.push(`<div class="text-blue-600">• Mata Pelajaran: ${originalValues.mapel_nama} → ${nama}</div>`);
         }
-        
         if (newKurikulumId && newKurikulumId !== originalValues.kurikulum_id) {
-            const kurikulumNama = document.getElementById('new_kurikulum_id').options[document.getElementById('new_kurikulum_id').selectedIndex].getAttribute('data-nama');
-            changes.push(`<div class="text-blue-600">• Kurikulum: ${originalValues.kurikulum_nama} → ${kurikulumNama}</div>`);
+            const nama = document.querySelector('#new_kurikulum_id option:checked').getAttribute('data-nama');
+            changes.push(`<div class="text-blue-600">• Kurikulum: ${originalValues.kurikulum_nama} → ${nama}</div>`);
         }
-        
-        if (newKelas && newKelas !== originalValues.kelas) {
-            changes.push(`<div class="text-blue-600">• Kelas: ${originalValues.kelas} → ${newKelas}</div>`);
+        if (newKelasVal && newKelasText !== originalValues.kelas) {
+            changes.push(`<div class="text-blue-600">• Kelas: ${originalValues.kelas} → ${newKelasText}</div>`);
         }
-        
+
         const changesSummary = document.getElementById('changesSummary');
-        if (changes.length > 0) {
-            changesSummary.innerHTML = changes.join('');
-        } else {
-            changesSummary.innerHTML = '<div class="text-gray-500">Tidak ada perubahan</div>';
-        }
+        changesSummary.innerHTML = changes.length ? changes.join('') : '<div class="text-gray-500">Tidak ada perubahan</div>';
     }
 
-    // Form validation
     document.getElementById('editForm').addEventListener('submit', function(e) {
-        const newGuru = document.getElementById('new_guru_id').value;
-        const newMapel = document.getElementById('new_mapel_id').value;
-        const newKurikulum = document.getElementById('new_kurikulum_id').value;
-        const newKelas = document.getElementById('new_kelas').value;
-        
-        if (!newGuru || !newMapel || !newKurikulum || !newKelas) {
+        if (!document.getElementById('new_guru_id').value || !document.getElementById('new_mapel_id').value || !document.getElementById('new_kurikulum_id').value || !document.getElementById('new_kelas_id').value) {
             e.preventDefault();
             alert('Mohon lengkapi semua field yang diperlukan!');
-            return false;
         }
     });
 
-    // Initialize changes summary on page load
     updateChangesSummary();
 </script>
 @endsection

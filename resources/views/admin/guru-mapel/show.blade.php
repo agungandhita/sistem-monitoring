@@ -124,7 +124,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" 
-                                            onclick="confirmDelete('{{ $guru->guru_id }}', '{{ $mapel->mapel_id }}', '{{ $mapel->pivot->kurikulum_id }}', '{{ $mapel->pivot->kelas_id }}', '{{ $mapel->mapel }}', '{{ $mapel->kelas->nama_kelas ?? "N/A" }} - {{ $mapel->kelas->tingkat ?? "" }}')"
+                                            onclick="confirmDelete('{{ $guru->guru_id }}', '{{ $mapel->mapel_id }}', '{{ $mapel->pivot->kurikulum_id }}', '{{ $mapel->pivot->kelas_id }}', '{{ $mapel->mapel }}', '{{ $mapel->pivot->nama_kelas ?? "N/A" }} - {{ $mapel->pivot->tingkat ?? "" }}')"
                                             class="text-red-600 hover:text-red-900 transition duration-200" title="Hapus Penugasan">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -134,9 +134,9 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div class="bg-gray-50 p-3 rounded-lg">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">Kurikulum</label>
-                                    @if($mapel->pivot->kurikulum)
-                                        <p class="text-sm font-medium text-gray-900">{{ $mapel->pivot->kurikulum->nama_kurikulum }}</p>
-                                        <p class="text-xs text-gray-600">{{ $mapel->pivot->kurikulum->tahun_ajaran }}</p>
+                                    @if($mapel->kurikulum)
+                                        <p class="text-sm font-medium text-gray-900">{{ $mapel->kurikulum->nama_kurikulum }}</p>
+                                        <p class="text-xs text-gray-600">{{ $mapel->kurikulum->tahun_ajaran }}</p>
                                     @else
                                         <p class="text-sm text-gray-500">-</p>
                                     @endif
@@ -144,7 +144,7 @@
                                 <div class="bg-gray-50 p-3 rounded-lg">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">Kelas</label>
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        {{ $mapel->kelas->nama_kelas ?? 'N/A' }} - {{ $mapel->kelas->tingkat ?? '' }}
+                                        {{ $mapel->pivot->nama_kelas ?? 'N/A' }} - {{ $mapel->pivot->tingkat ?? $mapel->tingkat }}
                                     </span>
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded-lg">
@@ -186,7 +186,7 @@
                     @foreach($kelasSummary as $kelas => $mapels)
                     <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4 text-white text-center">
                         <div class="text-2xl font-bold">{{ $mapels->count() }}</div>
-                        <div class="text-purple-100 text-sm">Mapel di Kelas {{ $mapels->first()->kelas->nama_kelas ?? $kelas }}</div>
+                        <div class="text-purple-100 text-sm">Mapel di Kelas {{ $mapels->first()->pivot->nama_kelas ?? $kelas }}</div>
                     </div>
                     @endforeach
                 </div>

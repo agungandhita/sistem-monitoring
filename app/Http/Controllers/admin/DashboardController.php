@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $totalUser = User::count();
         
         // Get recent data for activity
-        $recentSiswa = Siswa::latest()->take(5)->get();
+        $recentSiswa = Siswa::with('kelas')->latest()->take(5)->get();
         $recentGuru = Guru::latest()->take(5)->get();
         $recentWali = Wali::latest()->take(5)->get();
         
@@ -38,10 +38,11 @@ class DashboardController extends Controller
                              ->groupBy('jenis_kelamin')
                              ->get();
         
-        // Get students by class
-        $siswaByKelas = Siswa::selectRaw('kelas, COUNT(*) as count')
-                            ->groupBy('kelas')
-                            ->orderBy('kelas')
+        // Get students by class with class name
+        $siswaByKelas = Siswa::join('kelas', 'siswas.kelas_id', '=', 'kelas.kelas_id')
+                            ->selectRaw('kelas.nama_kelas, COUNT(*) as count')
+                            ->groupBy('kelas.nama_kelas')
+                            ->orderBy('kelas.nama_kelas')
                             ->get();
         
         // Return view with dashboard data

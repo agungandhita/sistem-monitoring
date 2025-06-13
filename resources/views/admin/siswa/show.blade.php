@@ -190,18 +190,20 @@
                                 @endphp
                                 
                                 @if($otherChildren->count() > 0)
-                                    <div class="mt-3 pt-3 border-t border-gray-200">
-                                        <p class="text-xs font-medium text-gray-600 mb-2">Anak lainnya:</p>
-                                        <div class="space-y-1">
-                                            @foreach($otherChildren as $child)
-                                                <div class="flex justify-between items-center text-xs">
-                                                    <span class="text-gray-700">{{ $child->nama }}</span>
-                                                    <span class="text-gray-500">{{ $child->kelas }}</span>
-                                                </div>
-                                            @endforeach
-                                        </div>
+                                <div class="mt-3 pt-3 border-t border-gray-200">
+                                    <p class="text-xs font-medium text-gray-600 mb-2">Anak lainnya:</p>
+                                    <div class="space-y-1">
+                                        @foreach($otherChildren as $child)
+                                            <div class="flex justify-between items-center text-xs">
+                                                <span class="text-gray-700">{{ $child->nama }}</span>
+                                                <span class="text-gray-500">
+                                                    Kelas {{ $child->kelas->nama_kelas ?? '-' }} - Tahun {{ $child->kelas->tahun_ajaran ?? '-' }}
+                                                </span>
+                                            </div>
+                                        @endforeach
                                     </div>
-                                @endif
+                                </div>
+                            @endif
                             </div>
                         @endforeach
                     </div>

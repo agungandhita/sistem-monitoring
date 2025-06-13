@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\MapelController;
 use App\Http\Controllers\Admin\GuruMapelController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\JadwalController;
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\auth\RegisterController;
 
@@ -97,8 +99,38 @@ Route::middleware('admin')->group(function () {
         'update' => 'admin.kurikulum.update',
         'destroy' => 'admin.kurikulum.destroy'
     ]);
+    
+    // Class Management Routes
+    Route::resource('kelas', App\Http\Controllers\Admin\KelasController::class)->parameters([
+        'kelas' => 'kelas'  // Pastikan parameter name konsisten
+    ])->names([
+        'index' => 'admin.kelas.index',
+        'create' => 'admin.kelas.create',
+        'store' => 'admin.kelas.store',
+        'show' => 'admin.kelas.show',
+        'edit' => 'admin.kelas.edit',
+        'update' => 'admin.kelas.update',
+        'destroy' => 'admin.kelas.destroy'
+    ]);
+    
+    // Class AJAX Routes
+    Route::get('kelas/by-tingkat/{tingkat}', [App\Http\Controllers\Admin\KelasController::class, 'getByTingkat'])->name('admin.kelas.by-tingkat');
+    Route::get('kelas/by-kurikulum/{kurikulum_id}', [App\Http\Controllers\Admin\KelasController::class, 'getByKurikulum'])->name('admin.kelas.by-kurikulum');
  
-
+    // Schedule Management Routes
+    Route::resource('jadwal', App\Http\Controllers\Admin\JadwalController::class)->names([
+        'index' => 'admin.jadwal.index',
+        'create' => 'admin.jadwal.create',
+        'store' => 'admin.jadwal.store',
+        'show' => 'admin.jadwal.show',
+        'edit' => 'admin.jadwal.edit',
+        'update' => 'admin.jadwal.update',
+        'destroy' => 'admin.jadwal.destroy'
+    ]);
+    
+    // Schedule AJAX Routes
+    Route::get('jadwal/get-mapels-by-guru', [App\Http\Controllers\Admin\JadwalController::class, 'getMapelsByGuru'])->name('admin.jadwal.get-mapels-by-guru');
+    Route::get('jadwal/get-schedule-by-class', [App\Http\Controllers\Admin\JadwalController::class, 'getScheduleByClass'])->name('admin.jadwal.get-schedule-by-class');
    
     // AJAX Routes
     Route::get('siswa/available', [App\Http\Controllers\Admin\SiswaController::class, 'available'])->name('admin.siswa.available');

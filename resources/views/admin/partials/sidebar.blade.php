@@ -14,7 +14,29 @@
                         </a>
                     </li>
                     
-                    <!-- 2. TAHAP DATA MASTER (Urutan sesuai DatabaseSeeder) -->
+                    <!-- 2. KELAS -->
+                    <li>
+                        <a href="{{ route('admin.kelas.index') }}"
+                            class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                            </svg>
+                            <span>Kelas</span>
+                        </a>
+                    </li>
+                    
+                    <!-- 3. SISWA -->
+                    <li>
+                        <a href="{{ route('admin.siswa.index') }}"
+                            class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+                            </svg>
+                            <span>Siswa</span>
+                        </a>
+                    </li>
+                    
+                    <!-- 4. KURIKULUM -->
                     <li>
                         <a href="{{ route('admin.kurikulum.index') }}"
                             class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
@@ -24,6 +46,8 @@
                             <span>Kurikulum</span>
                         </a>
                     </li>
+                    
+                    <!-- 5. MAPEL -->
                     <li>
                         <a href="{{ route('admin.mapel.index') }}"
                             class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
@@ -33,6 +57,8 @@
                             <span>Mapel</span>
                         </a>
                     </li>
+                    
+                    <!-- 6. GURU -->
                     <li>
                         <a href="{{ route('admin.guru.index') }}"
                             class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
@@ -42,6 +68,8 @@
                             <span>Guru</span>
                         </a>
                     </li>
+                    
+                    <!-- 7. GURU MAPEL -->
                     <li>
                         <a href="{{ route('admin.guru-mapel.index') }}"
                             class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
@@ -51,25 +79,15 @@
                             <span>Guru Mapel</span>
                         </a>
                     </li>
-                    {{-- <li>
-                        <a href="{{ route('admin.kelas.index') }}"
-                            class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-                            </svg>
-                            <span>Kelas</span>
-                        </a>
-                    </li> --}}
                     
-                    <!-- 3. TAHAP SDM -->
-                    <!-- Tambahkan menu Wali jika sudah ada route -->
+                    <!-- 8. JADWAL -->
                     <li>
-                        <a href="{{ route('admin.siswa.index') }}"
+                        <a href="{{ route('admin.jadwal.index') }}"
                             class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-6-7.5h3m-3 4h3m-6-4h.01M9 16h.01" />
                             </svg>
-                            <span>Siswa</span>
+                            <span>Jadwal</span>
                         </a>
                     </li>
                     
@@ -86,88 +104,8 @@
                             <span>Rombel</span>
                         </a>
                     </li> --}}
-                    <li class="hs-accordion" id="jadwal-accordion">
-                        <button type="button"
-                            class="hs-accordion-toggle text-gray-700 gap-x-3 w-full text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all cursor-pointer"
-                            aria-controls="jadwal-accordion-sub">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-13.5h.008v.008H12V6.75Z" />
-                            </svg>
-                            <span>Jadwal Harian</span>
-                            <svg class="hs-accordion-active:rotate-180 ms-auto w-4 h-4 text-gray-600 transition-transform duration-300"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m6 9 6 6 6-6" />
-                            </svg>
-                        </button>
-
-                        <div id="jadwal-accordion-sub"
-                            class="hs-accordion-content w-full overflow-hidden transition-all duration-300 max-h-0"
-                            aria-labelledby="jadwal-accordion">
-                            <ul class="pt-2 ps-7 space-y-2">
-                                <li>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50"
-                                        href="{{ route('admin.jadwal-harian.index') }}">
-                                        Daftar Jadwal
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50"
-                                        href="{{ route('admin.jadwal-harian.create') }}">
-                                        Tambah Jadwal
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50"
-                                        href="{{ route('admin.jadwal-harian.weekly-schedule') }}">
-                                        Jadwal Mingguan
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="hs-accordion" id="catatan-accordion">
-                        <button type="button"
-                            class="hs-accordion-toggle text-gray-700 gap-x-3 w-full text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all cursor-pointer"
-                            aria-controls="catatan-accordion-sub">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
-                            </svg>
-                            <span>Catatan</span>
-                            <svg class="hs-accordion-active:rotate-180 ms-auto w-4 h-4 text-gray-600 transition-transform duration-300"
-                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round">
-                                <path d="m6 9 6 6 6-6" />
-                            </svg>
-                        </button>
-
-                        <div id="catatan-accordion-sub"
-                            class="hs-accordion-content w-full overflow-hidden transition-all duration-300 max-h-0"
-                            aria-labelledby="catatan-accordion">
-                            <ul class="pt-2 ps-7 space-y-2">
-                                <li>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50"
-                                        href="#">
-                                        Absensi
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50"
-                                        href="#">
-                                        Nilai Harian
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-50"
-                                        href="#">
-                                        Nilai Ulangan
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+        
+                
                 </ul>
 
                 <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-white">

@@ -123,15 +123,23 @@ class GuruMapelController extends Controller
         $guru = Guru::findOrFail($guru_id);
         $mapel = Mapel::findOrFail($mapel_id);
         $kurikulum = Kurikulum::findOrFail($kurikulum_id);
+        $currentKelas = Kelas::findOrFail($kelas_id);
         
         $gurus = Guru::all();
         $mapels = Mapel::all();
         $kurikulums = Kurikulum::all();
+        $kelas = Kelas::where('status', 'aktif')->get(); // Ganti $kelasList menjadi $kelas
         
-        $kelas = Kelas::where('status', 'aktif')->get();
-        $currentKelas = Kelas::findOrFail($kelas_id);
-        
-        return view('admin.guru-mapel.edit', compact('guru', 'mapel', 'kurikulum', 'currentKelas', 'gurus', 'mapels', 'kurikulums', 'kelas'));
+        return view('admin.guru-mapel.edit', compact(
+            'guru', 
+            'mapel', 
+            'kurikulum', 
+            'currentKelas', 
+            'gurus', 
+            'mapels', 
+            'kurikulums', 
+            'kelas' // Kirim sebagai $kelas
+        ));
     }
 
     /**

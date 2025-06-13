@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             WaliSeeder::class,       // Wali HARUS duluan (belum ada)
             SiswaSeeder::class,         // Siswa butuh Wali & Kelas
             GuruSeeder::class,          // Guru bisa bersamaan
+            Jadwalseeder::class,
             
             // 4. TAHAP ASSIGNMENT
               // Assignment butuh Guru, Mapel, Kurikulum
