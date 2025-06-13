@@ -109,30 +109,17 @@
                                 @enderror
                             </div>
                             <div>
-                                <label for="kelas" class="block text-sm font-medium text-gray-700 mb-2">Kelas <span class="text-red-500">*</span></label>
-                                <select name="kelas" id="kelas" required 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kelas') border-red-500 @enderror">
+                                <label for="kelas_id" class="block text-sm font-medium text-gray-700 mb-2">Kelas <span class="text-red-500">*</span></label>
+                                <select name="kelas_id" id="kelas_id" required 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('kelas_id') border-red-500 @enderror">
                                     <option value="">Pilih Kelas</option>
-                                    <option value="1A" {{ old('kelas') == '1A' ? 'selected' : '' }}>1A</option>
-                                    <option value="1B" {{ old('kelas') == '1B' ? 'selected' : '' }}>1B</option>
-                                    <option value="1C" {{ old('kelas') == '1C' ? 'selected' : '' }}>1C</option>
-                                    <option value="2A" {{ old('kelas') == '2A' ? 'selected' : '' }}>2A</option>
-                                    <option value="2B" {{ old('kelas') == '2B' ? 'selected' : '' }}>2B</option>
-                                    <option value="2C" {{ old('kelas') == '2C' ? 'selected' : '' }}>2C</option>
-                                    <option value="3A" {{ old('kelas') == '3A' ? 'selected' : '' }}>3A</option>
-                                    <option value="3B" {{ old('kelas') == '3B' ? 'selected' : '' }}>3B</option>
-                                    <option value="3C" {{ old('kelas') == '3C' ? 'selected' : '' }}>3C</option>
-                                    <option value="4A" {{ old('kelas') == '4A' ? 'selected' : '' }}>4A</option>
-                                    <option value="4B" {{ old('kelas') == '4B' ? 'selected' : '' }}>4B</option>
-                                    <option value="4C" {{ old('kelas') == '4C' ? 'selected' : '' }}>4C</option>
-                                    <option value="5A" {{ old('kelas') == '5A' ? 'selected' : '' }}>5A</option>
-                                    <option value="5B" {{ old('kelas') == '5B' ? 'selected' : '' }}>5B</option>
-                                    <option value="5C" {{ old('kelas') == '5C' ? 'selected' : '' }}>5C</option>
-                                    <option value="6A" {{ old('kelas') == '6A' ? 'selected' : '' }}>6A</option>
-                                    <option value="6B" {{ old('kelas') == '6B' ? 'selected' : '' }}>6B</option>
-                                    <option value="6C" {{ old('kelas') == '6C' ? 'selected' : '' }}>6C</option>
+                                    @foreach($kelas as $k)
+                                        <option value="{{ $k->kelas_id }}" {{ old('kelas_id') == $k->kelas_id ? 'selected' : '' }}>
+                                            {{ $k->nama_kelas }} - {{ $k->tingkat }} ({{ $k->kurikulum->nama_kurikulum }})
+                                        </option>
+                                    @endforeach
                                 </select>
-                                @error('kelas')
+                                @error('kelas_id')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -316,11 +303,13 @@
     });
 
     // Update preview when kelas is selected
-    document.getElementById('kelas').addEventListener('change', function() {
+    document.getElementById('kelas_id').addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
         const statusKelas = document.getElementById('statusKelas');
         
         if (this.value) {
-            document.getElementById('previewKelas').textContent = this.value;
+            const namaKelas = selectedOption.textContent.trim();
+            document.getElementById('previewKelas').textContent = namaKelas;
             statusKelas.innerHTML = '<i class="fas fa-check-circle text-green-500 text-xs mr-2"></i><span class="text-sm text-green-600">Kelas dipilih</span>';
             updateKurikulumPreview();
         } else {
@@ -331,10 +320,10 @@
 
     function updateKurikulumPreview() {
         const kurikulumId = document.getElementById('kurikulum_id').value;
-        const kelas = document.getElementById('kelas').value;
+        const kelasId = document.getElementById('kelas_id').value;
         const kurikulumPreview = document.getElementById('kurikulumPreview');
         
-        if (kurikulumId || kelas) {
+        if (kurikulumId || kelasId) {
             kurikulumPreview.style.display = 'block';
         } else {
             kurikulumPreview.style.display = 'none';
@@ -346,7 +335,7 @@
         const guru = document.getElementById('guru_id').value;
         const mapel = document.getElementById('mapel_id').value;
         const kurikulum = document.getElementById('kurikulum_id').value;
-        const kelas = document.getElementById('kelas').value;
+        const kelas = document.getElementById('kelas_id').value;
         
         if (!guru || !mapel || !kurikulum || !kelas) {
             e.preventDefault();

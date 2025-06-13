@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Wali;
 use App\Models\Siswa;
+use App\Models\Kelas;
 use Illuminate\Support\Facades\Hash;
 
 class SiswaSeeder extends Seeder
@@ -75,6 +76,16 @@ class SiswaSeeder extends Seeder
 
             $waliIds[] = $wali->wali_id;
         }
+
+        // Get kelas IDs for mapping
+        $kelasMap = [
+            '1' => Kelas::where('nama_kelas', '1A')->first()->kelas_id,
+            '2' => Kelas::where('nama_kelas', '2A')->first()->kelas_id,
+            '3' => Kelas::where('nama_kelas', '3A')->first()->kelas_id,
+            '4' => Kelas::where('nama_kelas', '4A')->first()->kelas_id,
+            '5' => Kelas::where('nama_kelas', '5A')->first()->kelas_id,
+            '6' => Kelas::where('nama_kelas', '6A')->first()->kelas_id,
+        ];
 
         // Create students for grades 1-6
         $students = [
@@ -275,8 +286,7 @@ class SiswaSeeder extends Seeder
                 'tempat_lahir' => $studentData['tempat_lahir'],
                 'alamat' => $studentData['alamat'],
                 'telepon' => $studentData['telepon'],
-                'kelas' => $studentData['kelas'],
-                'nama_kelas' => null, // Will be assigned when student is added to a class
+                'kelas_id' => $kelasMap[$studentData['kelas']],
                 'tahun_masuk' => $studentData['tahun_masuk'],
                 'status' => $studentData['status'],
                 'catatan' => $studentData['catatan']

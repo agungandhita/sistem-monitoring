@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId('guru_id')->constrained('gurus', 'guru_id')->onDelete('cascade');
             $table->foreignId('mapel_id')->constrained('mapels', 'mapel_id')->onDelete('cascade');
             $table->foreignId('kurikulum_id')->constrained('kurikulums', 'kurikulum_id')->onDelete('cascade');
-            $table->string('kelas');
+            $table->foreignId('kelas_id')->constrained('kelas', 'kelas_id')->onDelete('cascade');
             $table->timestamps();
             
             // Ensure a teacher can only teach one subject per class per curriculum
-            $table->unique(['guru_id', 'mapel_id', 'kelas', 'kurikulum_id']);
+            $table->unique(['guru_id', 'mapel_id','kelas_id','kurikulum_id']);
         });
     }
 

@@ -136,7 +136,7 @@
                 @forelse($gurus as $guru)
                     @forelse($guru->mapels as $mapel)
                     {{-- @dd($mapel) --}}
-                        <tr class="hover:bg-gray-50 transition duration-200" data-guru="{{ strtolower($guru->nama) }}" data-mapel="{{ strtolower($mapel->mapel) }}" data-kelas="{{ $mapel->pivot->kelas }}" data-jabatan="{{ strtolower($guru->jabatan) }}">
+                        <tr class="hover:bg-gray-50 transition duration-200" data-guru="{{ strtolower($guru->nama) }}" data-mapel="{{ strtolower($mapel->mapel) }}" data-kelas="{{ $mapel->pivot->kelas_id }}" data-jabatan="{{ strtolower($guru->jabatan) }}">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $no++ }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
@@ -179,7 +179,10 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    {{ $mapel->pivot->kelas }}
+                                    @php
+                                        $kelasObj = \App\Models\Kelas::find($mapel->pivot->kelas_id);
+                                    @endphp
+                                    {{ $kelasObj ? $kelasObj->nama_kelas . ' - ' . $kelasObj->tingkat : 'N/A' }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -193,12 +196,16 @@
                                        class="text-blue-600 hover:text-blue-900 transition duration-200" title="Lihat Detail">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a href="{{ route('admin.guru-mapel.edit', [$guru->guru_id, $mapel->mapel_id, $mapel->pivot->kurikulum_id, $mapel->pivot->kelas]) }}" 
+                                    <a href="{{ route('admin.guru-mapel.edit', [$guru->guru_id, $mapel->mapel_id, $mapel->pivot->kurikulum_id, $mapel->pivot->kelas_id]) }}" 
                                        class="text-yellow-600 hover:text-yellow-900 transition duration-200" title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" 
-                                            onclick="confirmDelete('{{ $guru->guru_id }}', '{{ $mapel->mapel_id }}', '{{ $mapel->pivot->kurikulum_id }}', '{{ $mapel->pivot->kelas }}', '{{ $guru->nama }}', '{{ $mapel->mapel }}', '{{ $mapel->pivot->kelas }}')"
+                                            @php
+                                                $kelasObj = \App\Models\Kelas::find($mapel->pivot->kelas_id);
+                                                $kelasName = $kelasObj ? $kelasObj->nama_kelas . ' - ' . $kelasObj->tingkat : 'N/A';
+                                            @endphp
+                                            onclick="confirmDelete('{{ $guru->guru_id }}', '{{ $mapel->mapel_id }}', '{{ $mapel->pivot->kurikulum_id }}', '{{ $mapel->pivot->kelas_id }}', '{{ $guru->nama }}', '{{ $mapel->mapel }}', '{{ $kelasName }}')"
                                             class="text-red-600 hover:text-red-900 transition duration-200" title="Hapus">
                                         <i class="fas fa-trash"></i>
                                     </button>

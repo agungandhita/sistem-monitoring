@@ -38,7 +38,7 @@
             </div>
             <div>
                 <span class="text-yellow-700 font-medium">Kelas:</span>
-                <div class="text-yellow-900">{{ $kelas }}</div>
+                <div class="text-yellow-900">{{ $kelas->nama_kelas }}</div>
             </div>
         </div>
     </div>
@@ -139,20 +139,17 @@
                                 @enderror
                             </div>
                             <div>
-                                <label for="new_kelas" class="block text-sm font-medium text-gray-700 mb-2">Kelas <span class="text-red-500">*</span></label>
-                                <select name="new_kelas" id="new_kelas" required 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('new_kelas') border-red-500 @enderror">
+                                <label for="new_kelas_id" class="block text-sm font-medium text-gray-700 mb-2">Kelas <span class="text-red-500">*</span></label>
+                                <select name="new_kelas_id" id="new_kelas_id" required 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('new_kelas_id') border-red-500 @enderror">
                                     <option value="">Pilih Kelas</option>
-                                    @php
-                                        $kelasOptions = ['1A', '1B', '1C', '2A', '2B', '2C', '3A', '3B', '3C', '4A', '4B', '4C', '5A', '5B', '5C', '6A', '6B', '6C'];
-                                    @endphp
-                                    @foreach($kelasOptions as $kelasOption)
-                                        <option value="{{ $kelasOption }}" {{ (old('new_kelas', $kelas) == $kelasOption) ? 'selected' : '' }}>
-                                            {{ $kelasOption }}
+                                    @foreach($kelas as $k)
+                                        <option value="{{ $k->kelas_id }}" {{ (old('new_kelas_id', $currentKelas->kelas_id ?? '') == $k->kelas_id) ? 'selected' : '' }}>
+                                            {{ $k->nama_kelas }} - {{ $k->tingkat }} ({{ $k->kurikulum->nama_kurikulum }})
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('new_kelas')
+                                @error('new_kelas_id')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>

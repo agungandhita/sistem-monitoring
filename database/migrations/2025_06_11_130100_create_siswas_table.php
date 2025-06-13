@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('siswas', function (Blueprint $table) {
             $table->id('siswa_id');
+            $table->foreignId('kelas_id')->constrained('kelas', 'kelas_id')->onDelete('cascade');
             $table->string('nis')->unique();
             $table->string('nama');
             $table->enum('jenis_kelamin', ['L', 'P']);
@@ -20,7 +21,6 @@ return new class extends Migration
             $table->string('tempat_lahir');
             $table->string('alamat');
             $table->string('telepon')->nullable();
-            $table->string('kelas');
             $table->string('tahun_masuk');
             $table->enum('status', ['aktif', 'tidak_aktif', 'lulus'])->default('aktif');
             $table->text('catatan')->nullable();

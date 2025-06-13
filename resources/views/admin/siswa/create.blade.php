@@ -69,11 +69,17 @@
             </div>
             
             <div>
-                <label for="kelas" class="block text-sm font-medium text-gray-700 mb-2">Kelas *</label>
-                <input type="text" name="kelas" id="kelas" value="{{ old('kelas') }}" 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('kelas') border-red-500 @enderror" 
-                       placeholder="Contoh: VII-A, VIII-B" required>
-                @error('kelas')
+                <label for="kelas_id" class="block text-sm font-medium text-gray-700 mb-2">Kelas *</label>
+                <select name="kelas_id" id="kelas_id" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('kelas_id') border-red-500 @enderror" required>
+                    <option value="">Pilih Kelas</option>
+                    @foreach($kelas as $kelasItem)
+                        <option value="{{ $kelasItem->kelas_id }}" {{ old('kelas_id') == $kelasItem->kelas_id ? 'selected' : '' }}>
+                            {{ $kelasItem->nama_kelas }} - {{ $kelasItem->tingkat }} ({{ $kelasItem->kurikulum->nama_kurikulum }})
+                        </option>
+                    @endforeach
+                </select>
+                @error('kelas_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>

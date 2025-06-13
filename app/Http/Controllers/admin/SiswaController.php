@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Siswa;
 use App\Models\Wali;
 use App\Models\User;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        $siswas = Siswa::with('walis')->paginate(10);
+        $siswas = Siswa::with(['walis', 'kelas'])->paginate(10);
         return view('admin.siswa.index', compact('siswas'));
     }
 
@@ -28,7 +29,8 @@ class SiswaController extends Controller
     public function create()
     {
         $walis = Wali::with('user')->get();
-        return view('admin.siswa.create', compact('walis'));
+        $kelas = Kelas::with('kurikulum')->where('status', 'aktif')->get();
+        return view('admin.siswa.create', compact('walis', 'kelas'));
     }
 
     /**
@@ -44,7 +46,7 @@ class SiswaController extends Controller
             'tempat_lahir' => 'required|string|max:255',
             'alamat' => 'required|string',
             'telepon' => 'nullable|string|max:20',
-            'kelas' => 'required|string|max:50',
+            'kelas_id' => 'required|exists:kelas,kelas_id',
             'tahun_masuk' => 'required|string|max:4',
             'status' => 'required|in:aktif,tidak_aktif,lulus',
             'catatan' => 'nullable|string',
@@ -58,7 +60,7 @@ class SiswaController extends Controller
         try {
             $siswa = Siswa::create($request->only([
                 'nis', 'nama', 'jenis_kelamin', 'tanggal_lahir', 'tempat_lahir',
-                'alamat', 'telepon', 'kelas', 'tahun_masuk', 'status', 'catatan'
+                'alamat', 'telepon', 'kelas_id', 'tahun_masuk', 'status', 'catatan'
             ]));
 
             // Attach guardians with relationship type
@@ -93,9 +95,10 @@ class SiswaController extends Controller
      */
     public function edit(Siswa $siswa)
     {
-        $siswa->load('walis');
+        $siswa->load(['walis', 'kelas']);
         $walis = Wali::with('user')->get();
-        return view('admin.siswa.edit', compact('siswa', 'walis'));
+        $kelas = Kelas::with('kurikulum')->where('status', 'aktif')->get();
+        return view('admin.siswa.edit', compact('siswa', 'walis', 'kelas'));
     }
 
     /**
@@ -111,7 +114,7 @@ class SiswaController extends Controller
             'tempat_lahir' => 'required|string|max:255',
             'alamat' => 'required|string',
             'telepon' => 'nullable|string|max:20',
-            'kelas' => 'required|string|max:50',
+            'kelas_id' => 'required|exists:kelas,kelas_id',
             'tahun_masuk' => 'required|string|max:4',
             'status' => 'required|in:aktif,tidak_aktif,lulus',
             'catatan' => 'nullable|string',
@@ -125,7 +128,7 @@ class SiswaController extends Controller
         try {
             $siswa->update($request->only([
                 'nis', 'nama', 'jenis_kelamin', 'tanggal_lahir', 'tempat_lahir',
-                'alamat', 'telepon', 'kelas', 'tahun_masuk', 'status', 'catatan'
+                'alamat', 'telepon', 'kelas_id', 'tahun_masuk', 'status', 'catatan'
             ]));
 
             // Sync guardians with relationship type

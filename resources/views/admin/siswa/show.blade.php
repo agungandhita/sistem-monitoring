@@ -64,7 +64,14 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-600 mb-1">Kelas</label>
-                        <p class="text-gray-900 font-medium">{{ $siswa->kelas }}</p>
+                        <p class="text-gray-900 font-medium">
+                            @if($siswa->kelas)
+                                {{ $siswa->kelas->nama_kelas }} - {{ $siswa->kelas->tingkat }}
+                                <span class="text-sm text-gray-500">({{ $siswa->kelas->kurikulum->nama_kurikulum }})</span>
+                            @else
+                                <span class="text-gray-500">Belum ada kelas</span>
+                            @endif
+                        </p>
                     </div>
                     
                     <div>

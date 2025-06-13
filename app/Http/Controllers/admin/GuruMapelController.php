@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Guru;
 use App\Models\Mapel;
 use App\Models\Kurikulum;
+use App\Models\Kelas;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -18,7 +19,7 @@ class GuruMapelController extends Controller
     {
         $gurus = Guru::with([
             'mapels' => function($query) {
-                $query->withPivot('kurikulum_id', 'kelas');
+                $query->withPivot('kurikulum_id', 'kelas_id');
             }
         ])->paginate(10);
         
@@ -42,7 +43,7 @@ class GuruMapelController extends Controller
             foreach ($guru->mapels as $mapel) {
                 if ($mapel->pivot->kurikulum_id && isset($kurikulums[$mapel->pivot->kurikulum_id])) {
                     $mapel->kurikulum = $kurikulums[$mapel->pivot->kurikulum_id];
-                }
+                }  
             }
         }
         
@@ -57,7 +58,8 @@ class GuruMapelController extends Controller
         $gurus = Guru::all();
         $mapels = Mapel::all();
         $kurikulums = Kurikulum::all();
-        return view('admin.guru-mapel.create', compact('gurus', 'mapels', 'kurikulums'));
+        $kelas = Kelas::where('status', 'aktif')->get();
+        return view('admin.guru-mapel.create', compact('gurus', 'mapels', 'kurikulums', 'kelas'));
     }
 
     /**
@@ -65,11 +67,12 @@ class GuruMapelController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'guru_id' => 'required|exists:gurus,guru_id',
             'mapel_id' => 'required|exists:mapels,mapel_id',
             'kurikulum_id' => 'required|exists:kurikulums,kurikulum_id',
-            'kelas' => 'required|string|max:10'
+            'kelas_id' => 'required|exists:kelas,kelas_id'
         ]);
 
         try {
@@ -79,7 +82,7 @@ class GuruMapelController extends Controller
             $exists = $guru->mapels()
                 ->wherePivot('mapel_id', $request->mapel_id)
                 ->wherePivot('kurikulum_id', $request->kurikulum_id)
-                ->wherePivot('kelas', $request->kelas)
+                ->wherePivot('kelas_id', $request->kelas_id)
                 ->exists();
 
             if ($exists) {
@@ -89,7 +92,7 @@ class GuruMapelController extends Controller
 
             $guru->mapels()->attach($request->mapel_id, [
                 'kurikulum_id' => $request->kurikulum_id,
-                'kelas' => $request->kelas
+                'kelas_id' => $request->kelas_id
             ]);
 
             Alert::success('Berhasil', 'Penugasan guru berhasil ditambahkan');
@@ -106,7 +109,7 @@ class GuruMapelController extends Controller
     public function show($guru_id)
     {
         $guru = Guru::with(['mapels' => function($query) {
-            $query->withPivot('kurikulum_id', 'kelas');
+            $query->withPivot('kurikulum_id', 'kelas_id');
         }])->findOrFail($guru_id);
         
         return view('admin.guru-mapel.show', compact('guru'));
@@ -115,7 +118,7 @@ class GuruMapelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($guru_id, $mapel_id, $kurikulum_id, $kelas)
+    public function edit($guru_id, $mapel_id, $kurikulum_id, $kelas_id)
     {
         $guru = Guru::findOrFail($guru_id);
         $mapel = Mapel::findOrFail($mapel_id);
@@ -125,19 +128,22 @@ class GuruMapelController extends Controller
         $mapels = Mapel::all();
         $kurikulums = Kurikulum::all();
         
-        return view('admin.guru-mapel.edit', compact('guru', 'mapel', 'kurikulum', 'kelas', 'gurus', 'mapels', 'kurikulums'));
+        $kelas = Kelas::where('status', 'aktif')->get();
+        $currentKelas = Kelas::findOrFail($kelas_id);
+        
+        return view('admin.guru-mapel.edit', compact('guru', 'mapel', 'kurikulum', 'currentKelas', 'gurus', 'mapels', 'kurikulums', 'kelas'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $guru_id, $mapel_id, $kurikulum_id, $kelas)
+    public function update(Request $request, $guru_id, $mapel_id, $kurikulum_id, $kelas_id)
     {
         $request->validate([
             'new_guru_id' => 'required|exists:gurus,guru_id',
             'new_mapel_id' => 'required|exists:mapels,mapel_id',
             'new_kurikulum_id' => 'required|exists:kurikulums,kurikulum_id',
-            'new_kelas' => 'required|string|max:10'
+            'new_kelas_id' => 'required|exists:kelas,kelas_id'
         ]);
 
         try {
@@ -148,13 +154,13 @@ class GuruMapelController extends Controller
             $exists = $newGuru->mapels()
                 ->wherePivot('mapel_id', $request->new_mapel_id)
                 ->wherePivot('kurikulum_id', $request->new_kurikulum_id)
-                ->wherePivot('kelas', $request->new_kelas)
+                ->wherePivot('kelas_id', $request->new_kelas_id)
                 ->exists();
 
             if ($exists && !($guru_id == $request->new_guru_id && 
                            $mapel_id == $request->new_mapel_id && 
                            $kurikulum_id == $request->new_kurikulum_id && 
-                           $kelas == $request->new_kelas)) {
+                           $kelas_id == $request->new_kelas_id)) {
                 Alert::error('Gagal', 'Kombinasi guru, mata pelajaran, kurikulum, dan kelas sudah ada');
                 return back()->withInput();
             }
@@ -162,13 +168,13 @@ class GuruMapelController extends Controller
             // Remove old relationship
             $oldGuru->mapels()->wherePivot('mapel_id', $mapel_id)
                 ->wherePivot('kurikulum_id', $kurikulum_id)
-                ->wherePivot('kelas', $kelas)
+                ->wherePivot('kelas_id', $kelas_id)
                 ->detach();
 
             // Add new relationship
             $newGuru->mapels()->attach($request->new_mapel_id, [
                 'kurikulum_id' => $request->new_kurikulum_id,
-                'kelas' => $request->new_kelas
+                'kelas_id' => $request->new_kelas_id
             ]);
 
             Alert::success('Berhasil', 'Penugasan guru berhasil diperbarui');
@@ -182,14 +188,14 @@ class GuruMapelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($guru_id, $mapel_id, $kurikulum_id, $kelas)
+    public function destroy($guru_id, $mapel_id, $kurikulum_id, $kelas_id)
     {
         try {
             $guru = Guru::findOrFail($guru_id);
             
             $guru->mapels()->wherePivot('mapel_id', $mapel_id)
                 ->wherePivot('kurikulum_id', $kurikulum_id)
-                ->wherePivot('kelas', $kelas)
+                ->wherePivot('kelas_id', $kelas_id)
                 ->detach();
 
             Alert::success('Berhasil', 'Penugasan guru berhasil dihapus');

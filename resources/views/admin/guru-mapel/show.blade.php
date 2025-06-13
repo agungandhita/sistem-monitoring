@@ -50,7 +50,7 @@
                         <div class="text-sm text-gray-600">Mata Pelajaran</div>
                     </div>
                     <div class="bg-white rounded-lg p-3 shadow-sm">
-                        <div class="text-2xl font-bold text-purple-600">{{ $guru->mapels->pluck('pivot.kelas')->unique()->count() }}</div>
+                        <div class="text-2xl font-bold text-purple-600">{{ $guru->mapels->pluck('pivot.kelas_id')->unique()->count() }}</div>
                         <div class="text-sm text-gray-600">Kelas Diampu</div>
                     </div>
                 </div>
@@ -119,12 +119,12 @@
                                     @endif
                                 </div>
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('admin.guru-mapel.edit', [$guru->guru_id, $mapel->mapel_id, $mapel->pivot->kurikulum_id, $mapel->pivot->kelas]) }}" 
+                                    <a href="{{ route('admin.guru-mapel.edit', [$guru->guru_id, $mapel->mapel_id, $mapel->pivot->kurikulum_id, $mapel->pivot->kelas_id]) }}" 
                                        class="text-blue-600 hover:text-blue-900 transition duration-200" title="Edit Penugasan">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <button type="button" 
-                                            onclick="confirmDelete('{{ $guru->guru_id }}', '{{ $mapel->mapel_id }}', '{{ $mapel->pivot->kurikulum_id }}', '{{ $mapel->pivot->kelas }}', '{{ $mapel->mapel }}', '{{ $mapel->pivot->kelas }}')"
+                                            onclick="confirmDelete('{{ $guru->guru_id }}', '{{ $mapel->mapel_id }}', '{{ $mapel->pivot->kurikulum_id }}', '{{ $mapel->pivot->kelas_id }}', '{{ $mapel->mapel }}', '{{ $mapel->kelas->nama_kelas ?? "N/A" }} - {{ $mapel->kelas->tingkat ?? "" }}')"
                                             class="text-red-600 hover:text-red-900 transition duration-200" title="Hapus Penugasan">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -144,7 +144,7 @@
                                 <div class="bg-gray-50 p-3 rounded-lg">
                                     <label class="block text-xs font-medium text-gray-600 mb-1">Kelas</label>
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        {{ $mapel->pivot->kelas }}
+                                        {{ $mapel->kelas->nama_kelas ?? 'N/A' }} - {{ $mapel->kelas->tingkat ?? '' }}
                                     </span>
                                 </div>
                                 <div class="bg-gray-50 p-3 rounded-lg">
@@ -181,12 +181,12 @@
                 </h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     @php
-                        $kelasSummary = $guru->mapels->groupBy('pivot.kelas');
+                        $kelasSummary = $guru->mapels->groupBy('pivot.kelas_id');
                     @endphp
                     @foreach($kelasSummary as $kelas => $mapels)
                     <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4 text-white text-center">
                         <div class="text-2xl font-bold">{{ $mapels->count() }}</div>
-                        <div class="text-purple-100 text-sm">Mapel di Kelas {{ $kelas }}</div>
+                        <div class="text-purple-100 text-sm">Mapel di Kelas {{ $mapels->first()->kelas->nama_kelas ?? $kelas }}</div>
                     </div>
                     @endforeach
                 </div>
@@ -254,7 +254,7 @@
 
 @section('scripts')
 <script>
-    function confirmDelete(guruId, mapelId, kurikulumId, kelas, mapelNama, kelasNama) {
+    function confirmDelete(guruId, mapelId, kurikulumId, kelasId, mapelNama, kelasNama) {
         const message = `Apakah Anda yakin ingin menghapus penugasan:<br><br>
                         <strong>Guru:</strong> {{ $guru->nama }}<br>
                         <strong>Mata Pelajaran:</strong> ${mapelNama}<br>
@@ -262,7 +262,7 @@
                         Tindakan ini tidak dapat dibatalkan.`;
         
         document.getElementById('deleteMessage').innerHTML = message;
-        document.getElementById('deleteForm').action = `/admin/guru-mapel/${guruId}/${mapelId}/${kurikulumId}/${kelas}`;
+        document.getElementById('deleteForm').action = `/admin/guru-mapel/${guruId}/${mapelId}/${kurikulumId}/${kelasId}`;
         document.getElementById('deleteModal').classList.remove('hidden');
         document.getElementById('deleteModal').classList.add('flex');
     }

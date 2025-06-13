@@ -17,15 +17,15 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,          // Admin user
             
             // 2. TAHAP DATA MASTER (Urutan penting!)
-            // KurikulumSeeder::class,     // Kurikulum HARUS duluan
-            // MapelSeeder::class,      
-            // GuruMapelSeeder::class,     // Mapel butuh Kurikulum
-            // KelasSeeder::class,         // Kelas untuk pengelompokan
+            KurikulumSeeder::class,     // Kurikulum HARUS duluan
+            MapelSeeder::class,      
+            GuruMapelSeeder::class,     // Mapel butuh Kurikulum
+            KelasSeeder::class,         // Kelas untuk pengelompokan
             
             // 3. TAHAP SDM
-            // WaliSeeder::class,       // Wali HARUS duluan (belum ada)
-            // SiswaSeeder::class,         // Siswa butuh Wali & Kelas
-            // GuruSeeder::class,          // Guru bisa bersamaan
+            WaliSeeder::class,       // Wali HARUS duluan (belum ada)
+            SiswaSeeder::class,         // Siswa butuh Wali & Kelas
+            GuruSeeder::class,          // Guru bisa bersamaan
             
             // 4. TAHAP ASSIGNMENT
               // Assignment butuh Guru, Mapel, Kurikulum

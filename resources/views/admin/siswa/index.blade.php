@@ -34,8 +34,8 @@
         <div class="flex gap-2">
             <select id="kelasFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                 <option value="">Semua Kelas</option>
-                @foreach($siswas->pluck('kelas')->unique() as $kelas)
-                    <option value="{{ $kelas }}">{{ $kelas }}</option>
+                @foreach($siswas->pluck('kelas.nama_kelas')->unique() as $namaKelas)
+                    <option value="{{ $namaKelas }}">{{ $namaKelas }}</option>
                 @endforeach
             </select>
             <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
@@ -65,7 +65,7 @@
             <tbody class="bg-white divide-y divide-gray-200" id="siswaTableBody">
                 @forelse($siswas as $index => $siswa)
                 <tr class="hover:bg-gray-50 transition duration-200" 
-                    data-kelas="{{ $siswa->kelas }}" 
+                    data-kelas="{{ $siswa->kelas ? $siswa->kelas->nama_kelas : '' }}" 
                     data-status="{{ $siswa->status }}" 
                     data-nama="{{ strtolower($siswa->nama) }}">
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -91,7 +91,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            {{ $siswa->kelas }}
+                            {{ $siswa->kelas ? $siswa->kelas->nama_kelas : 'Belum ada kelas' }}
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

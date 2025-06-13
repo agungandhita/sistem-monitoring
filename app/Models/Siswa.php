@@ -20,8 +20,7 @@ class Siswa extends Model
         'tempat_lahir',
         'alamat',
         'telepon',
-        'kelas',
-        'nama_kelas',
+        'kelas_id',
         'tahun_masuk',
         'status',
         'catatan'
@@ -42,8 +41,13 @@ class Siswa extends Model
     // Relationship with Kelas (Many-to-One)
     public function kelas()
     {
-        return $this->belongsTo(Kelas::class, 'nama_kelas', 'nama_kelas')
-                    ->where('tingkat', $this->kelas);
+        return $this->belongsTo(Kelas::class, 'kelas_id', 'kelas_id');
+    }
+    
+    // Get jadwals for this student's class
+    public function jadwals()
+    {
+        return $this->hasMany(Jadwal::class, 'kelas_id', 'kelas_id');
     }
     
     // Scope for students in specific grade
