@@ -215,8 +215,15 @@ class JadwalController extends Controller
             $jadwal = Jadwal::findOrFail($id);
             $jadwal->delete();
             Alert::success('Berhasil', 'Jadwal berhasil dihapus.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Handle foreign key constraint violation
+            if ($e->getCode() == '23000') {
+                Alert::error('Error', 'Jadwal tidak dapat dihapus karena masih terkait dengan data lain.');
+            } else {
+                Alert::error('Error', 'Terjadi kesalahan database saat menghapus jadwal.');
+            }
         } catch (\Exception $e) {
-            Alert::error('Error', 'Terjadi kesalahan saat menghapus jadwal.');
+            Alert::error('Error', 'Terjadi kesalahan saat menghapus jadwal: ' . $e->getMessage());
         }
         
         return redirect()->route('admin.jadwal.index');
@@ -227,17 +234,27 @@ class JadwalController extends Controller
      */
     public function getMapelsByGuru(Request $request)
     {
-        $guruId = $request->guru_id;
-        $kurikulumId = $request->kurikulum_id;
-        
-        $mapels = GuruMapel::with('mapel')
-                          ->where('guru_id', $guruId)
-                          ->where('kurikulum_id', $kurikulumId)
-                          ->get()
-                          ->pluck('mapel')
-                          ->unique('mapel_id');
-        
-        return response()->json($mapels);
+        try {
+            $request->validate([
+                'guru_id' => 'required|exists:gurus,guru_id',
+                'kurikulum_id' => 'required|exists:kurikulums,kurikulum_id'
+            ]);
+            
+            $guruId = $request->guru_id;
+            $kurikulumId = $request->kurikulum_id;
+            
+            $mapels = GuruMapel::with('mapel')
+                              ->where('guru_id', $guruId)
+                              ->where('kurikulum_id', $kurikulumId)
+                              ->get()
+                              ->pluck('mapel')
+                              ->unique('mapel_id')
+                              ->values(); // Reset array keys
+            
+            return response()->json($mapels);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengambil data mata pelajaran'], 500);
+        }
     }
     
     /**
@@ -245,18 +262,29 @@ class JadwalController extends Controller
      */
     public function getScheduleByClass(Request $request)
     {
-        $kelasId = $request->kelas_id;
-        $hari = $request->hari;
-        $tahunAjaran = $request->tahun_ajaran;
-        
-        $jadwals = Jadwal::with(['guru', 'mapel'])
-                        ->where('kelas_id', $kelasId)
-                        ->where('hari', $hari)
-                        ->where('tahun_ajaran', $tahunAjaran)
-                        ->orderBy('jam_ke')
-                        ->get();
-        
-        return response()->json($jadwals);
+        try {
+            $request->validate([
+                'kelas_id' => 'required|exists:kelas,kelas_id',
+                'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu',
+                'tahun_ajaran' => 'required|string'
+            ]);
+            
+            $kelasId = $request->kelas_id;
+            $hari = $request->hari;
+            $tahunAjaran = $request->tahun_ajaran;
+            
+            $jadwals = Jadwal::with(['guru', 'mapel'])
+                            ->where('kelas_id', $kelasId)
+                            ->where('hari', $hari)
+                            ->where('tahun_ajaran', $tahunAjaran)
+                            ->where('status', 'aktif')
+                            ->orderBy('jam_ke')
+                            ->get();
+            
+            return response()->json($jadwals);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengambil data jadwal'], 500);
+        }
     }
     
     /**
@@ -295,5 +323,45 @@ class JadwalController extends Controller
         }
         
         return null;
+    }
+    
+    /**
+     * Display schedules by day
+     */
+    public function showByDay(Request $request)
+    {
+        $request->validate([
+            'hari' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu',
+            'kelas_id' => 'nullable|exists:kelas,kelas_id',
+            'tahun_ajaran' => 'nullable|string'
+        ]);
+        
+        $hari = $request->hari;
+        $kelasId = $request->kelas_id;
+        $tahunAjaran = $request->tahun_ajaran;
+        
+        $query = Jadwal::with(['guru', 'mapel', 'kelas', 'kurikulum'])
+                       ->where('hari', $hari)
+                       ->where('status', 'aktif')
+                       ->orderBy('jam_ke');
+        
+        if ($kelasId) {
+            $query->where('kelas_id', $kelasId);
+        }
+        
+        if ($tahunAjaran) {
+            $query->where('tahun_ajaran', $tahunAjaran);
+        }
+        
+        $jadwals = $query->get();
+        
+        // Data untuk filter
+        $kelas = Kelas::orderBy('nama_kelas')->get();
+        $tahunAjaranList = Jadwal::select('tahun_ajaran')
+                                ->distinct()
+                                ->orderBy('tahun_ajaran', 'desc')
+                                ->pluck('tahun_ajaran');
+        
+        return view('admin.jadwal.by-day', compact('jadwals', 'hari', 'kelas', 'tahunAjaranList', 'kelasId', 'tahunAjaran'));
     }
 }

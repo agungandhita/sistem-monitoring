@@ -117,7 +117,8 @@ Route::middleware('admin')->group(function () {
     Route::get('kelas/by-tingkat/{tingkat}', [App\Http\Controllers\Admin\KelasController::class, 'getByTingkat'])->name('admin.kelas.by-tingkat');
     Route::get('kelas/by-kurikulum/{kurikulum_id}', [App\Http\Controllers\Admin\KelasController::class, 'getByKurikulum'])->name('admin.kelas.by-kurikulum');
  
-    // Schedule Management Routes
+    Route::get('jadwal/by-day', [App\Http\Controllers\Admin\JadwalController::class, 'showByDay'])->name('admin.jadwal.by-day');
+    
     Route::resource('jadwal', App\Http\Controllers\Admin\JadwalController::class)->names([
         'index' => 'admin.jadwal.index',
         'create' => 'admin.jadwal.create',
@@ -128,16 +129,15 @@ Route::middleware('admin')->group(function () {
         'destroy' => 'admin.jadwal.destroy'
     ]);
     
-    // Schedule AJAX Routes
-    Route::get('jadwal/get-mapels-by-guru', [App\Http\Controllers\Admin\JadwalController::class, 'getMapelsByGuru'])->name('admin.jadwal.get-mapels-by-guru');
-    Route::get('jadwal/get-schedule-by-class', [App\Http\Controllers\Admin\JadwalController::class, 'getScheduleByClass'])->name('admin.jadwal.get-schedule-by-class');
-   
     // AJAX Routes
-    Route::get('siswa/available', [App\Http\Controllers\Admin\SiswaController::class, 'available'])->name('admin.siswa.available');
-    
+    Route::get('get-mapels-by-guru', [App\Http\Controllers\Admin\JadwalController::class, 'getMapelsByGuru'])->name('admin.jadwal.get-mapels-by-guru');
+    Route::get('get-schedule-by-class', [App\Http\Controllers\Admin\JadwalController::class, 'getScheduleByClass'])->name('admin.jadwal.get-schedule-by-class');
 });
 
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [App\Http\Controllers\auth\LoginController::class, 'logout']);
 });
+
+// Jadwal by day route (non-AJAX)
+

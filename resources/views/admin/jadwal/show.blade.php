@@ -2,200 +2,161 @@
 
 @section('container')
 <div class="bg-white rounded-lg shadow-md p-6 mt-24">
-    <div class="flex justify-between items-center mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800">Detail Jadwal Pelajaran</h1>
-            <p class="text-gray-600">Informasi lengkap jadwal pelajaran</p>
-        </div>
-        <div class="flex space-x-3">
-            <a href="{{ route('admin.jadwal.edit', $jadwal->jadwal_id) }}" 
-               class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                </svg>
-                Edit
-            </a>
-            <a href="{{ route('admin.jadwal.index') }}" 
-               class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                Kembali
-            </a>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Informasi Jadwal -->
-        <div class="bg-gray-50 rounded-lg p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4h3a1 1 0 011 1v9a1 1 0 01-1 1H5a1 1 0 01-1-1V8a1 1 0 011-1h3z"></path>
-                </svg>
-                Informasi Jadwal
-            </h2>
-            
-            <div class="space-y-4">
-                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span class="text-gray-600 font-medium">Hari:</span>
-                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                        {{ $jadwal->hari }}
-                    </span>
-                </div>
-                
-                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span class="text-gray-600 font-medium">Jam Ke:</span>
-                    <span class="text-gray-900 font-semibold">{{ $jadwal->jam_ke }}</span>
-                </div>
-                
-                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span class="text-gray-600 font-medium">Waktu:</span>
-                    <span class="text-gray-900 font-semibold">
-                        {{ date('H:i', strtotime($jadwal->jam_mulai)) }} - {{ date('H:i', strtotime($jadwal->jam_selesai)) }}
-                    </span>
-                </div>
-                
-                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span class="text-gray-600 font-medium">Tahun Ajaran:</span>
-                    <span class="text-gray-900 font-semibold">{{ $jadwal->tahun_ajaran }}</span>
-                </div>
-                
-                <div class="flex justify-between items-center py-2">
-                    <span class="text-gray-600 font-medium">Status:</span>
-                    @if($jadwal->status == 'aktif')
-                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                            Aktif
-                        </span>
-                    @else
-                        <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
-                            Tidak Aktif
-                        </span>
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <!-- Informasi Mata Pelajaran -->
-        <div class="bg-gray-50 rounded-lg p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                </svg>
-                Mata Pelajaran & Kurikulum
-            </h2>
-            
-            <div class="space-y-4">
-                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span class="text-gray-600 font-medium">Mata Pelajaran:</span>
-                    <span class="text-gray-900 font-semibold">{{ $jadwal->mapel->nama_mapel ?? '-' }}</span>
-                </div>
-                
-                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span class="text-gray-600 font-medium">Kode Mapel:</span>
-                    <span class="text-gray-900 font-semibold">{{ $jadwal->mapel->kode_mapel ?? '-' }}</span>
-                </div>
-                
-                <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                    <span class="text-gray-600 font-medium">Kurikulum:</span>
-                    <span class="text-gray-900 font-semibold">{{ $jadwal->kurikulum->nama_kurikulum ?? '-' }}</span>
-                </div>
-                
-                <div class="flex justify-between items-center py-2">
-                    <span class="text-gray-600 font-medium">Kelas:</span>
-                    <span class="text-gray-900 font-semibold">{{ $jadwal->kelas->nama_kelas ?? '-' }}</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Informasi Guru -->
-        <div class="bg-gray-50 rounded-lg p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                </svg>
-                Informasi Guru
-            </h2>
-            
-            @if($jadwal->guru)
-                <div class="flex items-center mb-4">
-                    @if($jadwal->guru->foto)
-                        <img class="h-16 w-16 rounded-full object-cover mr-4" src="{{ asset('uploads/guru/' . $jadwal->guru->foto) }}" alt="Foto Guru">
-                    @else
-                        <div class="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center mr-4">
-                            <svg class="h-8 w-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                    @endif
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">{{ $jadwal->guru->nama_guru }}</h3>
-                        <p class="text-gray-600">{{ $jadwal->guru->jabatan ?? 'Guru' }}</p>
-                    </div>
-                </div>
-                
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600 font-medium">NIP:</span>
-                        <span class="text-gray-900 font-semibold">{{ $jadwal->guru->nip ?? '-' }}</span>
-                    </div>
-                    
-                    <div class="flex justify-between items-center py-2 border-b border-gray-200">
-                        <span class="text-gray-600 font-medium">Email:</span>
-                        <span class="text-gray-900">{{ $jadwal->guru->email ?? '-' }}</span>
-                    </div>
-                    
-                    <div class="flex justify-between items-center py-2">
-                        <span class="text-gray-600 font-medium">No. Telepon:</span>
-                        <span class="text-gray-900">{{ $jadwal->guru->no_telepon ?? '-' }}</span>
-                    </div>
-                </div>
-            @else
-                <p class="text-gray-500 italic">Data guru tidak tersedia</p>
-            @endif
-        </div>
-
-        <!-- Catatan -->
-        <div class="bg-gray-50 rounded-lg p-6">
-            <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
-                <svg class="w-5 h-5 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>
-                Catatan
-            </h2>
-            
-            @if($jadwal->catatan)
-                <div class="bg-white rounded-lg p-4 border border-gray-200">
-                    <p class="text-gray-700 leading-relaxed">{{ $jadwal->catatan }}</p>
-                </div>
-            @else
-                <p class="text-gray-500 italic">Tidak ada catatan untuk jadwal ini</p>
-            @endif
-        </div>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="mt-8 pt-6 border-t border-gray-200">
+    <div class="mb-6">
         <div class="flex justify-between items-center">
-            <div class="text-sm text-gray-500">
-                <p>Dibuat: {{ $jadwal->created_at ? $jadwal->created_at->format('d M Y H:i') : '-' }}</p>
-                <p>Diperbarui: {{ $jadwal->updated_at ? $jadwal->updated_at->format('d M Y H:i') : '-' }}</p>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Detail Jadwal Pelajaran</h1>
+                <p class="text-gray-600">Informasi lengkap jadwal pelajaran</p>
             </div>
-            
             <div class="flex space-x-3">
-                <form action="{{ route('admin.jadwal.destroy', $jadwal->jadwal_id) }}" method="POST" class="inline" 
-                      onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini? Tindakan ini tidak dapat dibatalkan.')">
+                <a href="{{ route('admin.jadwal.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Kembali
+                </a>
+                <a href="{{ route('admin.jadwal.edit', $jadwal->jadwal_id) }}" class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Edit
+                </a>
+                <form action="{{ route('admin.jadwal.destroy', $jadwal->jadwal_id) }}" method="POST" class="inline-block" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?')">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" 
-                            class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
-                        Hapus Jadwal
+                        Hapus
                     </button>
                 </form>
             </div>
         </div>
+    </div>
+
+    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-sm text-blue-700">
+                    Jadwal ini {{ $jadwal->status === 'aktif' ? 'aktif' : 'tidak aktif' }} untuk tahun ajaran {{ $jadwal->tahun_ajaran }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-gray-50 rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Informasi Jadwal</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Hari</h3>
+                    <p class="text-base text-gray-900">{{ $jadwal->hari }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Jam Ke</h3>
+                    <p class="text-base text-gray-900">{{ $jadwal->jam_ke }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Waktu</h3>
+                    <p class="text-base text-gray-900">{{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Status</h3>
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $jadwal->status === 'aktif' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                        {{ $jadwal->status === 'aktif' ? 'Aktif' : 'Tidak Aktif' }}
+                    </span>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Tahun Ajaran</h3>
+                    <p class="text-base text-gray-900">{{ $jadwal->tahun_ajaran }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-gray-50 rounded-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">Informasi Akademik</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Mata Pelajaran</h3>
+                    <p class="text-base text-gray-900">{{ $jadwal->mapel->nama_mapel }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Guru Pengajar</h3>
+                    <p class="text-base text-gray-900">{{ $jadwal->guru->nama_guru }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Kelas</h3>
+                    <p class="text-base text-gray-900">{{ $jadwal->kelas->nama_kelas }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Kurikulum</h3>
+                    <p class="text-base text-gray-900">{{ $jadwal->kurikulum->nama_kurikulum }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if($jadwal->catatan)
+    <div class="mt-6 bg-gray-50 rounded-lg p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Catatan</h2>
+        <p class="text-base text-gray-900">{{ e($jadwal->catatan) }}</p>
+    </div>
+    @endif
+
+    <div class="mt-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Jadwal Lain pada Hari yang Sama</h2>
+        @php
+            $relatedJadwals = App\Models\Jadwal::where('hari', $jadwal->hari)
+                ->where('kelas_id', $jadwal->kelas_id)
+                ->where('tahun_ajaran', $jadwal->tahun_ajaran)
+                ->where('jadwal_id', '!=', $jadwal->jadwal_id)
+                ->orderBy('jam_ke')
+                ->get();
+        @endphp
+
+        @if($relatedJadwals->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Ke</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mata Pelajaran</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guru</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach($relatedJadwals as $relatedJadwal)
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $relatedJadwal->jam_ke }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $relatedJadwal->jam_mulai }} - {{ $relatedJadwal->jam_selesai }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $relatedJadwal->mapel->nama_mapel }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $relatedJadwal->guru->nama_guru }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{{ route('admin.jadwal.show', $relatedJadwal->jadwal_id) }}" class="text-blue-600 hover:text-blue-900 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="bg-gray-50 p-4 rounded-lg text-center">
+                <p class="text-gray-500">Tidak ada jadwal lain pada hari yang sama untuk kelas ini.</p>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

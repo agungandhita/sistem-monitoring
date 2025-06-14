@@ -27,8 +27,8 @@ class Jadwal extends Model
     ];
     
     protected $casts = [
-        'jam_mulai' => 'datetime:H:i',
-        'jam_selesai' => 'datetime:H:i'
+        'jam_mulai' => 'string',
+        'jam_selesai' => 'string'
     ];
     
     // Relationship with Mapel (Many-to-One)
