@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Guru extends Model
+class Guru extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
     
     protected $table = 'gurus';
     protected $primaryKey = 'guru_id';
@@ -27,7 +28,8 @@ class Guru extends Model
     ];
     
     protected $casts = [
-        'tanggal_lahir' => 'date'
+        'tanggal_lahir' => 'date',
+        'password' => 'hashed'
     ];
     
     protected $hidden = [

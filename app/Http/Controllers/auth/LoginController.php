@@ -34,21 +34,48 @@ class LoginController extends Controller
             } elseif ($user->role == 'wali') {
                 return redirect()->intended('/wali');
             }
-            
- 
         }
  
         return back()->with('LoginError', 'Login Failed!');
     }
 
+    public function guruIndex()
+    {
+        return view('guru.auth.login', [
+            'tittle' => 'login guru'
+        ]);
+    }
+
+    // Method untuk login guru dengan guard terpisah
+    public function guruLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::guard('guru')->attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->route('guru.dashboard');
+        }
+
+        return back()->with('LoginError', 'Login Failed!');
+    }
+
+    // Method untuk logout guru
+    public function guruLogout(Request $request)
+    {
+        Auth::guard('guru')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('guru.login');
+    }
+
     public function logout(Request $request)
     {
-    Auth::logout();
- 
-    $request->session()->invalidate();
- 
-    $request->session()->regenerateToken();
- 
-    return redirect('/');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }

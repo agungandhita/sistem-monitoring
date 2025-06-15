@@ -56,10 +56,31 @@
           </div> 
 
           <div class="mt-8"> 
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-3.5 px-4 text-[15px] font-medium tracking-wide rounded-lg text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300">Masuk</button> 
-            <p class="text-sm mt-6 text-center text-gray-600">Belum punya akun? <a href="/register" class="text-blue-600 font-medium hover:text-blue-700 ml-1 whitespace-nowrap transition-colors">Daftar di sini</a></p> 
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 py-3.5 px-4 text-[15px] font-medium tracking-wide rounded-lg text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300">Masuk sebagai Admin</button> 
           </div> 
         </form> 
+        
+        <!-- Teacher Login Button -->
+        <div class="mt-6">
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="px-2 bg-white text-gray-500">atau</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <a href="/guru/login" class="w-full flex justify-center items-center py-3.5 px-4 text-[15px] font-medium tracking-wide rounded-lg text-green-600 bg-green-50 border border-green-200 hover:bg-green-100 hover:border-green-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              Masuk sebagai Guru
+            </a>
+          </div>
+        </div>
+        
+        <p class="text-sm mt-6 text-center text-gray-600">Belum punya akun? <a href="/register" class="text-blue-600 font-medium hover:text-blue-700 ml-1 whitespace-nowrap transition-colors">Daftar di sini</a></p>
       </div> 
 
       <div class="order-1 lg:order-2 flex items-center justify-center relative"> 

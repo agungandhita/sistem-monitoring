@@ -11,35 +11,33 @@ use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\JadwalController;
 use App\Http\Controllers\auth\LoginController;
 use App\Http\Controllers\auth\RegisterController;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use App\Http\Controllers\Guru\AuthController as GuruAuthController;
+use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
+use App\Http\Controllers\Guru\NilaiHarianController;
+use App\Http\Controllers\Guru\CatatanPerkembanganController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-
+// Guest Routes
 Route::middleware('guest')->group(function () {
-
-    Route::get('/', [App\Http\Controllers\auth\LoginController::class, 'index'])->name('beranda');
-    Route::post('/masuk', [App\Http\Controllers\auth\LoginController::class, 'login']);
-    Route::get('/register', [App\Http\Controllers\auth\RegisterController::class, 'index'])->name('register');
-    Route::post('/register/akun', [App\Http\Controllers\auth\RegisterController::class, 'store']);
+    Route::get('/', [LoginController::class, 'index'])->name('beranda');
+    Route::post('/masuk', [LoginController::class, 'login']);
+    Route::get('/register', [RegisterController::class, 'index'])->name('register');
+    Route::post('/register/akun', [RegisterController::class, 'store']);
 });
 
+// Guru Routes - Guest (untuk login)
+Route::prefix('guru')->middleware('guest:guru')->group(function () {
+    Route::get('/login', [LoginController::class, 'guruIndex'])->name('guru.login');
+    Route::post('/login', [LoginController::class, 'guruLogin'])->name('guru.login.post');
+});
+
+// Admin Routes
 Route::middleware('admin')->group(function () {
-
     Route::get('/admin', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
-
+    
     // Student Management Routes - sudah konsisten
     Route::get('siswa/create-wali', [App\Http\Controllers\Admin\SiswaController::class, 'createWali'])->name('admin.siswa.create-wali');
     Route::post('siswa/store-wali', [App\Http\Controllers\Admin\SiswaController::class, 'storeWali'])->name('admin.siswa.store-wali');
@@ -136,8 +134,23 @@ Route::middleware('admin')->group(function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::post('/logout', [App\Http\Controllers\auth\LoginController::class, 'logout']);
+    Route::post('/logout', [LoginController::class, 'logout']);
 });
 
-// Jadwal by day route (non-AJAX)
+// Guru Routes dengan middleware auth:guru
+Route::middleware(['auth:guru'])->group(function () {
+    Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('guru.dashboard');
+    Route::post('/logout', [LoginController::class, 'guruLogout'])->name('guru.logout');
+    
+    // Nilai Harian
+    Route::get('/nilai-harian', [NilaiHarianController::class, 'index'])->name('guru.nilai-harian.index');
+    Route::post('/nilai-harian', [NilaiHarianController::class, 'store'])->name('guru.nilai-harian.store');
+    
+    // Catatan Perkembangan
+    Route::get('/catatan-perkembangan', [CatatanPerkembanganController::class, 'index'])->name('guru.catatan-perkembangan.index');
+    Route::get('/catatan-perkembangan/create/{siswa}', [CatatanPerkembanganController::class, 'create'])->name('guru.catatan-perkembangan.create');
+    Route::post('/catatan-perkembangan', [CatatanPerkembanganController::class, 'store'])->name('guru.catatan-perkembangan.store');
+    Route::get('/catatan-perkembangan/{siswa}', [CatatanPerkembanganController::class, 'show'])->name('guru.catatan-perkembangan.show');
+});
+
 
