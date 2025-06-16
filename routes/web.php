@@ -20,9 +20,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Guest Routes
+// Guest Routes for Admin
 Route::middleware('guest')->group(function () {
-    Route::get('/', [LoginController::class, 'index'])->name('beranda');
+    Route::get('/login', [LoginController::class, 'index'])->name('login'); // Changed from 'login.admin' to 'login'
     Route::post('/masuk', [LoginController::class, 'login']);
     Route::get('/register', [RegisterController::class, 'index'])->name('register');
     Route::post('/register/akun', [RegisterController::class, 'store']);
@@ -31,7 +31,27 @@ Route::middleware('guest')->group(function () {
 // Guru Routes - Guest (untuk login)
 Route::prefix('guru')->middleware('guest:guru')->group(function () {
     Route::get('/login', [LoginController::class, 'guruIndex'])->name('guru.login');
-    Route::post('/login', [LoginController::class, 'guruLogin'])->name('guru.login.post');
+    Route::post('/login/guru', [LoginController::class, 'guruLogin'])->name('guru.login.post');
+});
+
+   // Wali Routes - Guest (untuk login)
+   Route::prefix('wali')->middleware('guest:wali')->group(function () {
+    Route::get('/login', [App\Http\Controllers\Wali\AuthController::class, 'showLoginForm'])->name('wali.login');
+    Route::post('/login/wali', [App\Http\Controllers\Wali\AuthController::class, 'loginWali'])->name('wali.login.post');
+});
+
+// Routes untuk Wali dengan middleware auth:wali
+Route::middleware(['auth:wali'])->group(function () {
+    Route::get('/wali/dashboard', [App\Http\Controllers\Wali\DashboardController::class, 'index'])->name('wali.dashboard');
+    Route::post('/wali/logout', [App\Http\Controllers\Wali\AuthController::class, 'logout'])->name('wali.logout');
+    
+    // Catatan Perkembangan
+    Route::get('/wali/catatan-perkembangan', [App\Http\Controllers\Wali\CatatanPerkembanganController::class, 'index'])->name('wali.catatan-perkembangan.index');
+    Route::get('/wali/catatan-perkembangan/{siswa}', [App\Http\Controllers\Wali\CatatanPerkembanganController::class, 'show'])->name('wali.catatan-perkembangan.show');
+    
+    // Jadwal
+    Route::get('/wali/jadwal', [App\Http\Controllers\Wali\JadwalController::class, 'index'])->name('wali.jadwal.index');
+    Route::get('/wali/jadwal/{siswa}', [App\Http\Controllers\Wali\JadwalController::class, 'show'])->name('wali.jadwal.show');
 });
 
 // Admin Routes
@@ -134,13 +154,13 @@ Route::middleware('admin')->group(function () {
 
 
 Route::middleware('auth')->group(function () {
-    Route::post('/logout', [LoginController::class, 'logout']);
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
 // Guru Routes dengan middleware auth:guru
 Route::middleware(['auth:guru'])->group(function () {
     Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('guru.dashboard');
-    Route::post('/logout', [LoginController::class, 'guruLogout'])->name('guru.logout');
+    Route::post('/guru/logout', [LoginController::class, 'guruLogout'])->name('guru.logout');
     
     // Nilai Harian
     Route::get('/nilai-harian', [NilaiHarianController::class, 'index'])->name('guru.nilai-harian.index');
@@ -154,3 +174,9 @@ Route::middleware(['auth:guru'])->group(function () {
 });
 
 
+// Routes untuk Wali
+
+
+ 
+    
+  

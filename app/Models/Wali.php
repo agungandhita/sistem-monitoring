@@ -12,7 +12,6 @@ class Wali extends Model
     protected $table = "walis";
     protected $primaryKey = "wali_id";
 
-
     protected $fillable = [
         'user_id',
         'nama',

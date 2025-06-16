@@ -110,7 +110,7 @@
 
                 <!-- Back to Admin -->
                 <div class="text-center">
-                    <a href="{{ route('beranda') }}" class="text-sm text-blue-600 hover:text-blue-500">
+                    <a href="{{ route('login') }}" class="text-sm text-blue-600 hover:text-blue-500">
                         Kembali ke Login Admin
                     </a>
                 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class isWali
@@ -15,10 +16,10 @@ class isWali
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!empty(auth()->user()) && auth()->user()->role == 'wali'){
+        if (Auth::guard('wali')->check()) {
             return $next($request);
-         }
+        }
 
-        return redirect('/');
+        return redirect('/wali/login')->with('error', 'Akses hanya untuk wali.');
     }
 }
