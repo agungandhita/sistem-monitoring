@@ -2,7 +2,7 @@
 
 @section('title', 'Catatan Perkembangan ' . $siswa->nama . ' - Wali')
 
-@section('content')
+@section('container')
 <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">

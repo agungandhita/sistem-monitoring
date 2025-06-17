@@ -11,7 +11,7 @@
     <!-- Filter Form -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Filter Kelas dan Mapel</h3>
-        <form method="GET" action="{{ route('guru.nilai-harian.index') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <form method="GET" action="{{ route('guru.nilai-harian.index') }}" id="filterForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Kelas -->
             <div>
                 <label for="kelas_id" class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
@@ -20,7 +20,7 @@
                     @if(isset($kelasOptions))
                         @foreach($kelasOptions as $kelas)
                             <option value="{{ $kelas->kelas_id }}" {{ request('kelas_id') == $kelas->kelas_id ? 'selected' : '' }}>
-                                {{ $kelas->kelas }}
+                                {{ $kelas->nama_kelas }}
                             </option>
                         @endforeach
                     @endif
@@ -32,7 +32,7 @@
                 <label for="mapel_id" class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
                 <select name="mapel_id" id="mapel_id" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     <option value="">Pilih Mapel</option>
-                    @if(isset($mapelOptions))
+                    @if(isset($mapelOptions) && $mapelOptions->count() > 0)
                         @foreach($mapelOptions as $mapel)
                             <option value="{{ $mapel->mapel_id }}" {{ request('mapel_id') == $mapel->mapel_id ? 'selected' : '' }}>
                                 {{ $mapel->mapel }}
@@ -60,7 +60,7 @@
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-lg font-semibold text-gray-900">Input Nilai Harian</h3>
                 <div class="text-sm text-gray-600">
-                    <span class="font-medium">Kelas:</span> {{ $selectedKelas->kelas ?? 'N/A' }} |
+                    <span class="font-medium">Kelas:</span> {{ $selectedKelas->nama_kelas ?? 'N/A' }} |
                     <span class="font-medium">Mapel:</span> {{ $selectedMapel->mapel ?? 'N/A' }}
                 </div>
             </div>
@@ -70,11 +70,35 @@
                 <input type="hidden" name="kelas_id" value="{{ request('kelas_id') }}">
                 <input type="hidden" name="mapel_id" value="{{ request('mapel_id') }}">
                 
-                <!-- Tanggal -->
-                <div class="mb-6">
-                    <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
-                    <input type="date" name="tanggal" id="tanggal" value="{{ date('Y-m-d') }}"
-                        class="w-full md:w-auto px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                <!-- Form Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- Tanggal -->
+                    <div>
+                        <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                        <input type="date" name="tanggal" id="tanggal" value="{{ date('Y-m-d') }}"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    
+                    <!-- Jenis Penilaian -->
+                    <div>
+                        <label for="jenis_penilaian" class="block text-sm font-medium text-gray-700 mb-2">Jenis Penilaian</label>
+                        <select name="jenis_penilaian" id="jenis_penilaian" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                            <option value="">Pilih Jenis Penilaian</option>
+                            <option value="Tugas">Tugas</option>
+                            <option value="Kuis">Kuis</option>
+                            <option value="Ulangan Harian">Ulangan Harian</option>
+                            <option value="Praktik">Praktik</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Keterangan -->
+                    <div>
+                        <label for="keterangan" class="block text-sm font-medium text-gray-700 mb-2">Keterangan (Opsional)</label>
+                        <input type="text" name="keterangan" id="keterangan" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Contoh: Tugas Matematika Bab 1">
+                    </div>
                 </div>
 
                 <!-- Daftar Siswa -->
@@ -140,4 +164,25 @@
         </div>
     @endif
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const kelasSelect = document.getElementById('kelas_id');
+    const mapelSelect = document.getElementById('mapel_id');
+    const filterForm = document.getElementById('filterForm');
+    
+    // Auto submit when kelas is selected to load mapel options
+    kelasSelect.addEventListener('change', function() {
+        if (this.value) {
+            // Clear mapel selection
+            mapelSelect.value = '';
+            // Submit form to reload mapel options
+            filterForm.submit();
+        } else {
+            // Clear mapel options if no kelas selected
+            mapelSelect.innerHTML = '<option value="">Pilih Mapel</option>';
+        }
+    });
+});
+</script>
 @endsection

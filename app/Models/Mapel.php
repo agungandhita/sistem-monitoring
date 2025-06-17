@@ -49,6 +49,12 @@ class Mapel extends Model
                     ->withTimestamps();
     }
     
+    // Relationship with NilaiHarian (One-to-Many)
+    public function nilaiHarian()
+    {
+        return $this->hasMany(NilaiHarian::class, 'mapel_id', 'mapel_id');
+    }
+    
     // Relationship with Jadwal (One-to-Many)
     public function jadwals()
     {

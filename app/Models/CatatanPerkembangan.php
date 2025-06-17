@@ -16,8 +16,8 @@ class CatatanPerkembangan extends Model
         'siswa_id',
         'guru_id',
         'tanggal',
+        'jenis_catatan',
         'catatan',
-        'kategori',
         'semester',
         'tahun_ajaran'
     ];
@@ -36,5 +36,35 @@ class CatatanPerkembangan extends Model
     public function guru()
     {
         return $this->belongsTo(Guru::class, 'guru_id', 'guru_id');
+    }
+    
+    // Scope untuk filter berdasarkan guru
+    public function scopeByGuru($query, $guruId)
+    {
+        return $query->where('guru_id', $guruId);
+    }
+    
+    // Scope untuk filter berdasarkan siswa
+    public function scopeBySiswa($query, $siswaId)
+    {
+        return $query->where('siswa_id', $siswaId);
+    }
+    
+    // Scope untuk filter berdasarkan jenis catatan
+    public function scopeByJenis($query, $jenisCatatan)
+    {
+        return $query->where('jenis_catatan', $jenisCatatan);
+    }
+    
+    // Scope untuk filter berdasarkan tanggal
+    public function scopeByTanggal($query, $tanggal)
+    {
+        return $query->whereDate('tanggal', $tanggal);
+    }
+    
+    // Scope untuk filter berdasarkan periode
+    public function scopeByPeriode($query, $startDate, $endDate)
+    {
+        return $query->whereBetween('tanggal', [$startDate, $endDate]);
     }
 }

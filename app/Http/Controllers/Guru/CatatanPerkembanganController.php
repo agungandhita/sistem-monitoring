@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Jadwal;
 use App\Models\Siswa;
 use App\Models\Kelas;
+use App\Models\CatatanPerkembangan;
 
 class CatatanPerkembanganController extends Controller
 {
@@ -41,10 +42,12 @@ class CatatanPerkembanganController extends Controller
         ));
     }
     
-    public function create(Request $request)
+    public function create($siswa)
     {
         $guru = Auth::guard('guru')->user();
-        $siswaId = $request->get('siswa_id');
+        
+        // $siswa sudah berisi siswa_id dari route parameter
+        $siswaId = $siswa;
         
         if (!$siswaId) {
             return redirect()->route('guru.catatan-perkembangan.index')
@@ -72,15 +75,22 @@ class CatatanPerkembanganController extends Controller
         $request->validate([
             'siswa_id' => 'required|exists:siswas,siswa_id',
             'tanggal' => 'required|date',
-            'kategori' => 'required|in:akademik,perilaku,kehadiran,lainnya',
-            'catatan' => 'required|string|max:1000',
-            'skor' => 'nullable|integer|min:1|max:5'
+            'jenis_catatan' => 'required|in:akademik,perilaku,kehadiran,sosial,lainnya',
+            'catatan' => 'required|string|max:1000'
         ]);
         
         $guru = Auth::guard('guru')->user();
         
-        // Here you would save the development notes
-        // For now, we'll just return success message
+        // Create catatan perkembangan
+        CatatanPerkembangan::create([
+            'siswa_id' => $request->siswa_id,
+            'guru_id' => $guru->guru_id,
+            'tanggal' => $request->tanggal,
+            'jenis_catatan' => $request->jenis_catatan,
+            'catatan' => $request->catatan,
+            'semester' => $this->getCurrentSemester(),
+            'tahun_ajaran' => $this->getCurrentTahunAjaran()
+        ]);
         
         return redirect()->route('guru.catatan-perkembangan.index')
             ->with('success', 'Catatan perkembangan berhasil disimpan!');
@@ -102,9 +112,30 @@ class CatatanPerkembanganController extends Controller
                 ->with('error', 'Anda tidak mengajar di kelas siswa ini.');
         }
         
-        // Here you would get the development notes for this student
-        $catatanList = collect(); // Placeholder
+        // Get development notes for this student
+        $catatanList = CatatanPerkembangan::with('guru')
+            ->where('siswa_id', $siswaId)
+            ->orderBy('tanggal', 'desc')
+            ->get();
         
         return view('guru.catatan-perkembangan.show', compact('siswa', 'catatanList'));
+    }
+    
+    private function getCurrentSemester()
+    {
+        $month = date('n');
+        return ($month >= 7 && $month <= 12) ? 1 : 2;
+    }
+    
+    private function getCurrentTahunAjaran()
+    {
+        $year = date('Y');
+        $month = date('n');
+        
+        if ($month >= 7) {
+            return $year . '/' . ($year + 1);
+        } else {
+            return ($year - 1) . '/' . $year;
+        }
     }
 }

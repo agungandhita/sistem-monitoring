@@ -138,8 +138,8 @@ class JadwalController extends Controller
     public function edit(string $id)
     {
         $jadwal = Jadwal::findOrFail($id);
-        $gurus = Guru::orderBy('nama_guru')->get();
-        $mapels = Mapel::orderBy('nama_mapel')->get();
+        $gurus = Guru::orderBy('nama')->get();
+        $mapels = Mapel::orderBy('mapel')->get();
         $kelas = Kelas::orderBy('nama_kelas')->get();
         $kurikulums = Kurikulum::orderBy('nama_kurikulum')->get();
         

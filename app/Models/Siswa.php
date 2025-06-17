@@ -50,6 +50,18 @@ class Siswa extends Model
         return $this->hasMany(Jadwal::class, 'kelas_id', 'kelas_id');
     }
     
+    // Relationship with NilaiHarian (One-to-Many)
+    public function nilaiHarian()
+    {
+        return $this->hasMany(NilaiHarian::class, 'siswa_id', 'siswa_id');
+    }
+    
+    // Relationship with CatatanPerkembangan (One-to-Many)
+    public function catatanPerkembangan()
+    {
+        return $this->hasMany(CatatanPerkembangan::class, 'siswa_id', 'siswa_id');
+    }
+    
     // Scope for students in specific grade
     public function scopeInGrade($query, $tingkat)
     {

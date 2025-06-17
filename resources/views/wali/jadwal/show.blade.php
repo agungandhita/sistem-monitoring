@@ -2,7 +2,7 @@
 
 @section('title', 'Jadwal ' . $siswa->nama . ' - Wali')
 
-@section('content')
+@section('container')
 <div class="min-h-screen bg-gray-50">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">
@@ -80,7 +80,7 @@
                                             
                                             <!-- Subject Info -->
                                             <div>
-                                                <h4 class="text-lg font-semibold text-gray-900">{{ $jadwal->mapel->nama_mapel ?? 'Mata Pelajaran tidak ditemukan' }}</h4>
+                                                <h4 class="text-lg font-semibold text-gray-900">{{ $jadwal->mapel->mapel ?? 'Mata Pelajaran tidak ditemukan' }}</h4>
                                                 <div class="flex items-center space-x-4 text-sm text-gray-600 mt-1">
                                                     <span class="flex items-center">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

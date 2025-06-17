@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Nilai;
+use App\Models\NilaiHarian;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\GuruController;
 use App\Http\Controllers\Admin\MapelController;
@@ -14,6 +14,8 @@ use App\Http\Controllers\auth\RegisterController;
 use App\Http\Controllers\Guru\AuthController as GuruAuthController;
 use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 use App\Http\Controllers\Guru\NilaiHarianController;
+use App\Http\Controllers\Wali\NilaiHarianController as WaliNilaiHarianController;
+use App\Http\Controllers\Admin\NilaiHarianController as AdminNilaiHarianController;
 use App\Http\Controllers\Guru\CatatanPerkembanganController;
 
 Route::get('/', function () {
@@ -47,7 +49,12 @@ Route::middleware(['auth:wali'])->group(function () {
     
     // Catatan Perkembangan
     Route::get('/wali/catatan-perkembangan', [App\Http\Controllers\Wali\CatatanPerkembanganController::class, 'index'])->name('wali.catatan-perkembangan.index');
-    Route::get('/wali/catatan-perkembangan/{siswa}', [App\Http\Controllers\Wali\CatatanPerkembanganController::class, 'show'])->name('wali.catatan-perkembangan.show');
+Route::get('/wali/catatan-perkembangan/{siswa}', [App\Http\Controllers\Wali\CatatanPerkembanganController::class, 'show'])->name('wali.catatan-perkembangan.show');
+
+// Nilai Harian untuk Wali
+Route::get('/wali/nilai-harian', [WaliNilaiHarianController::class, 'index'])->name('wali.nilai-harian.index');
+Route::get('/wali/nilai-harian/{siswa}', [WaliNilaiHarianController::class, 'show'])->name('wali.nilai-harian.show');
+Route::get('/wali/nilai-harian/{siswa}/riwayat', [WaliNilaiHarianController::class, 'riwayat'])->name('wali.nilai-harian.riwayat');
     
     // Jadwal
     Route::get('/wali/jadwal', [App\Http\Controllers\Wali\JadwalController::class, 'index'])->name('wali.jadwal.index');
@@ -146,6 +153,11 @@ Route::middleware('admin')->group(function () {
         'update' => 'admin.jadwal.update',
         'destroy' => 'admin.jadwal.destroy'
     ]);
+    
+    // Nilai Harian untuk Admin
+    Route::get('/admin/nilai-harian', [AdminNilaiHarianController::class, 'index'])->name('admin.nilai-harian.index');
+    Route::get('/admin/nilai-harian/laporan', [AdminNilaiHarianController::class, 'laporan'])->name('admin.nilai-harian.laporan');
+    Route::get('/admin/nilai-harian/export', [AdminNilaiHarianController::class, 'export'])->name('admin.nilai-harian.export');
     
     // AJAX Routes
     Route::get('get-mapels-by-guru', [App\Http\Controllers\Admin\JadwalController::class, 'getMapelsByGuru'])->name('admin.jadwal.get-mapels-by-guru');

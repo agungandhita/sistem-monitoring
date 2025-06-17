@@ -102,7 +102,7 @@
                 <select id="guru_id" name="guru_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('guru_id') border-red-500 @enderror" required>
                     <option value="">Pilih Guru</option>
                     @foreach($gurus as $guru)
-                        <option value="{{ $guru->guru_id }}" {{ old('guru_id', $jadwal->guru_id) == $guru->guru_id ? 'selected' : '' }}>{{ $guru->nama_guru }}</option>
+                        <option value="{{ $guru->guru_id }}" {{ old('guru_id', $jadwal->guru_id) == $guru->guru_id ? 'selected' : '' }}>{{ $guru->nama }}</option>
                     @endforeach
                 </select>
                 @error('guru_id')
@@ -116,7 +116,7 @@
                 <select id="mapel_id" name="mapel_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @error('mapel_id') border-red-500 @enderror" required>
                     <option value="">Pilih Mata Pelajaran</option>
                     @foreach($mapels as $mapel)
-                        <option value="{{ $mapel->mapel_id }}" {{ old('mapel_id', $jadwal->mapel_id) == $mapel->mapel_id ? 'selected' : '' }}>{{ $mapel->nama_mapel }}</option>
+                        <option value="{{ $mapel->mapel_id }}" {{ old('mapel_id', $jadwal->mapel_id) == $mapel->mapel_id ? 'selected' : '' }}>{{ $mapel->mapel }}</option>
                     @endforeach
                 </select>
                 @error('mapel_id')

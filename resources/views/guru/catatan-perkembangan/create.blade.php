@@ -28,7 +28,7 @@
                 </div>
                 <div class="ml-4">
                     <h3 class="text-lg font-medium text-gray-900">{{ $siswa->nama }}</h3>
-                    <p class="text-sm text-gray-600">NIS: {{ $siswa->nis }} | Kelas: {{ $siswa->kelas->kelas ?? 'N/A' }}</p>
+                    <p class="text-sm text-gray-600">NIS: {{ $siswa->nis }} | Kelas: {{ $siswa->kelas->nama_kelas ?? 'N/A' }}</p>
                 </div>
             </div>
         </div>
@@ -52,34 +52,21 @@
                 @enderror
             </div>
 
-            <!-- Kategori -->
+            <!-- Jenis Catatan -->
             <div class="mb-6">
-                <label for="kategori" class="block text-sm font-medium text-gray-700 mb-2">
-                    Kategori <span class="text-red-500">*</span>
+                <label for="jenis_catatan" class="block text-sm font-medium text-gray-700 mb-2">
+                    Jenis Catatan <span class="text-red-500">*</span>
                 </label>
-                <select name="kategori" id="kategori" 
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kategori') border-red-500 @enderror" required>
-                    <option value="">Pilih Kategori</option>
-                    <option value="akademik" {{ old('kategori') == 'akademik' ? 'selected' : '' }}>Akademik</option>
-                    <option value="perilaku" {{ old('kategori') == 'perilaku' ? 'selected' : '' }}>Perilaku</option>
-                    <option value="sosial" {{ old('kategori') == 'sosial' ? 'selected' : '' }}>Sosial</option>
-                    <option value="kehadiran" {{ old('kategori') == 'kehadiran' ? 'selected' : '' }}>Kehadiran</option>
-                    <option value="lainnya" {{ old('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
+                <select name="jenis_catatan" id="jenis_catatan" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('jenis_catatan') border-red-500 @enderror" required>
+                    <option value="">Pilih Jenis Catatan</option>
+                    <option value="akademik" {{ old('jenis_catatan') == 'akademik' ? 'selected' : '' }}>Akademik</option>
+                    <option value="perilaku" {{ old('jenis_catatan') == 'perilaku' ? 'selected' : '' }}>Perilaku</option>
+                    <option value="sosial" {{ old('jenis_catatan') == 'sosial' ? 'selected' : '' }}>Sosial</option>
+                    <option value="kehadiran" {{ old('jenis_catatan') == 'kehadiran' ? 'selected' : '' }}>Kehadiran</option>
+                    <option value="lainnya" {{ old('jenis_catatan') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
                 </select>
-                @error('kategori')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Judul -->
-            <div class="mb-6">
-                <label for="judul" class="block text-sm font-medium text-gray-700 mb-2">
-                    Judul Catatan <span class="text-red-500">*</span>
-                </label>
-                <input type="text" name="judul" id="judul" value="{{ old('judul') }}"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('judul') border-red-500 @enderror"
-                    placeholder="Masukkan judul catatan" required>
-                @error('judul')
+                @error('jenis_catatan')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
@@ -96,19 +83,6 @@
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
                 <p class="mt-1 text-sm text-gray-500">Jelaskan perkembangan, prestasi, atau hal-hal yang perlu diperhatikan dari siswa.</p>
-            </div>
-
-            <!-- Tindak Lanjut -->
-            <div class="mb-6">
-                <label for="tindak_lanjut" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tindak Lanjut
-                </label>
-                <textarea name="tindak_lanjut" id="tindak_lanjut" rows="4"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('tindak_lanjut') border-red-500 @enderror"
-                    placeholder="Rencana tindak lanjut atau rekomendasi (opsional)...">{{ old('tindak_lanjut') }}</textarea>
-                @error('tindak_lanjut')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
             </div>
 
             <!-- Buttons -->

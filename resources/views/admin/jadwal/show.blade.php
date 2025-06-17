@@ -84,11 +84,11 @@
             <div class="space-y-4">
                 <div>
                     <h3 class="text-sm font-medium text-gray-500">Mata Pelajaran</h3>
-                    <p class="text-base text-gray-900">{{ $jadwal->mapel->nama_mapel }}</p>
+                    <p class="text-base text-gray-900">{{ $jadwal->mapel->mapel }}</p>
                 </div>
                 <div>
                     <h3 class="text-sm font-medium text-gray-500">Guru Pengajar</h3>
-                    <p class="text-base text-gray-900">{{ $jadwal->guru->nama_guru }}</p>
+                    <p class="text-base text-gray-900">{{ $jadwal->guru->nama }}</p>
                 </div>
                 <div>
                     <h3 class="text-sm font-medium text-gray-500">Kelas</h3>

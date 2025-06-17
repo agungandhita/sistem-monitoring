@@ -17,19 +17,21 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,          // Admin user
             
             // 2. TAHAP DATA MASTER (Urutan penting!)
-            KurikulumSeeder::class,     // Kurikulum HARUS duluan
-            MapelSeeder::class,      
-            GuruMapelSeeder::class,     // Mapel butuh Kurikulum
-            KelasSeeder::class,         // Kelas untuk pengelompokan
+            // KurikulumSeeder::class,     // Kurikulum HARUS duluan
+            // MapelSeeder::class,      
+            // GuruMapelSeeder::class,     // Mapel butuh Kurikulum
+            // KelasSeeder::class,         // Kelas untuk pengelompokan
             
             // 3. TAHAP SDM
-            WaliSeeder::class,       // Wali HARUS duluan (belum ada)
-            SiswaSeeder::class,         // Siswa butuh Wali & Kelas
-            GuruSeeder::class,          // Guru bisa bersamaan
-            Jadwalseeder::class,
+            // WaliSeeder::class,          // Wali HARUS duluan
+            // SiswaSeeder::class,         // Siswa butuh Wali & Kelas
+            // GuruSeeder::class,          // Guru bisa bersamaan
+            // WaliSiswaSeeder::class,     // Relasi wali-siswa
+            // Jadwalseeder::class,        // Jadwal pembelajaran
             
-            // 4. TAHAP ASSIGNMENT
-              // Assignment butuh Guru, Mapel, Kurikulum
+            // 4. TAHAP DATA OPERASIONAL
+            // NilaiHarianSeeder::class,        // Data nilai harian siswa
+            // CatatanPerkembanganSeeder::class, // Data catatan perkembangan siswa
         ]);
     }
 }

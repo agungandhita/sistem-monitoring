@@ -35,6 +35,9 @@ class DashboardController extends Controller
             ->orderBy('jam_ke')
             ->get();
             
+        // Count today's schedule
+        $totalJadwalHariIni = $jadwalHariIni->count();
+            
         // Get total classes taught by this teacher
         $totalKelas = Jadwal::where('guru_id', $guru->guru_id)
             ->where('tahun_ajaran', $tahunAjaran)
@@ -58,13 +61,18 @@ class DashboardController extends Controller
             ->orderBy('jam_ke')
             ->get()
             ->groupBy('hari');
+            
+        // Count total schedule for this week
+        $totalJadwalMingguIni = $jadwalMingguIni->flatten()->count();
         
         return view('guru.dashboard.index', compact(
             'guru', 
-            'jadwalHariIni', 
+            'jadwalHariIni',
+            'totalJadwalHariIni',
             'totalKelas', 
             'totalMapel', 
             'jadwalMingguIni',
+            'totalJadwalMingguIni',
             'hariIni'
         ));
     }

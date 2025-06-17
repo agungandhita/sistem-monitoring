@@ -50,7 +50,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Jadwal Hari Ini</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $jadwalHariIni ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $totalJadwalHariIni ?? 0 }}</p>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="ml-4">
                     <p class="text-sm font-medium text-gray-600">Jadwal Minggu Ini</p>
-                    <p class="text-2xl font-bold text-gray-900">{{ $jadwalMingguIni ?? 0 }}</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ $totalJadwalMingguIni ?? 0 }}</p>
                 </div>
             </div>
         </div>

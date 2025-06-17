@@ -80,7 +80,18 @@
                         </a>
                     </li>
                     
-                    <!-- 8. JADWAL -->
+                    <!-- 8. NILAI HARIAN -->
+                    <li>
+                        <a href="{{ route('admin.nilai-harian.index') }}"
+                            class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-[18px] h-[18px] mr-3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                            <span>Nilai Harian</span>
+                        </a>
+                    </li>
+                    
+                    <!-- 9. JADWAL -->
                     <li>
                         <a href="{{ route('admin.jadwal.index') }}"
                             class="text-gray-700 text-sm flex items-center hover:bg-gray-50 rounded-md px-4 py-2.5 transition-all">

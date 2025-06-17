@@ -52,6 +52,24 @@ class Guru extends Authenticatable
                     ->withTimestamps();
     }
     
+    // Relationship with NilaiHarian (One-to-Many)
+    public function nilaiHarian()
+    {
+        return $this->hasMany(NilaiHarian::class, 'guru_id', 'guru_id');
+    }
+    
+    // Relationship with CatatanPerkembangan (One-to-Many)
+    public function catatanPerkembangan()
+    {
+        return $this->hasMany(CatatanPerkembangan::class, 'guru_id', 'guru_id');
+    }
+    
+    // Relationship with Jadwal (One-to-Many)
+    public function jadwal()
+    {
+        return $this->hasMany(Jadwal::class, 'guru_id', 'guru_id');
+    }
+    
     // Relationship with Kelas through guru_mapel pivot table
     public function kelas()
     {

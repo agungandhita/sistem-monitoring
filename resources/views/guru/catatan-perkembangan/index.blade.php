@@ -20,7 +20,7 @@
                     @if(isset($kelasOptions))
                         @foreach($kelasOptions as $kelas)
                             <option value="{{ $kelas->kelas_id }}" {{ request('kelas_id') == $kelas->kelas_id ? 'selected' : '' }}>
-                                {{ $kelas->kelas }}
+                                {{ $kelas->nama_kelas }}
                             </option>
                         @endforeach
                     @endif

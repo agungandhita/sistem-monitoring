@@ -86,9 +86,9 @@
                             <div class="space-y-3 max-h-64 overflow-y-auto">
                                 @foreach($dayJadwals->take(5) as $jadwal)
                                     <div class="border-l-4 border-blue-400 pl-3 py-1">
-                                        <div class="font-medium text-gray-800">{{ $jadwal->mapel->nama_mapel }}</div>
+                                        <div class="font-medium text-gray-800">{{ $jadwal->mapel->mapel }}</div>
                                         <div class="text-sm text-gray-600">Jam ke-{{ $jadwal->jam_ke }} ({{ $jadwal->jam_mulai }} - {{ $jadwal->jam_selesai }})</div>
-                                        <div class="text-sm text-gray-600">{{ $jadwal->kelas->nama_kelas }} | {{ $jadwal->guru->nama_guru }}</div>
+                                        <div class="text-sm text-gray-600">{{ $jadwal->kelas->nama_kelas }} | {{ $jadwal->guru->nama }}</div>
                                     </div>
                                 @endforeach
                                 

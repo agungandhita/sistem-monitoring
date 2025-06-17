@@ -48,6 +48,18 @@ class Kelas extends Model
         return $this->hasMany(Jadwal::class, 'kelas_id', 'kelas_id');
     }
     
+    // Relationship with NilaiHarian (One-to-Many)
+    public function nilaiHarian()
+    {
+        return $this->hasMany(NilaiHarian::class, 'kelas_id', 'kelas_id');
+    }
+    
+    // Relationship with CatatanPerkembangan through Siswa
+    public function catatanPerkembangan()
+    {
+        return $this->hasManyThrough(CatatanPerkembangan::class, Siswa::class, 'kelas_id', 'siswa_id', 'kelas_id', 'siswa_id');
+    }
+    
     // Get gurus that teach in this class
     public function gurus()
     {
