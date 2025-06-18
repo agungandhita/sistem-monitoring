@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\NilaiHarianController as AdminNilaiHarianControll
 use App\Http\Controllers\Guru\CatatanPerkembanganController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 // Guest Routes for Admin
