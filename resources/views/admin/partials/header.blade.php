@@ -6,7 +6,7 @@
                 <h1 class="uppercase text-xl font-semibold text-gray-800">
                     SISMO
                 </h1>
-                <span class="text-xs text-gray-500 -mt-1">Sistem Informasi Sekolah Modern</span>
+                <span class="text-xs text-gray-500 -mt-1">Sistem Informasi Sekolah Monitoring</span>
             </div>
         </a>
         

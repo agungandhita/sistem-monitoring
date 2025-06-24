@@ -120,7 +120,7 @@
         <!-- Footer -->
         <div class="text-center mt-8">
             <p class="text-sm text-gray-500">
-                © {{ date('Y') }} SISMO. Sistem Informasi Sekolah Modern.
+                © {{ date('Y') }} SISMO. Sistem Informasi Sekolah Monitoring.
             </p>
         </div>
     </div>

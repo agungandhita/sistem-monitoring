@@ -12,7 +12,7 @@
         </div>
         <div class="text-center mb-8">
           <h1 class="text-gray-800 text-4xl font-bold mb-2">SISMO</h1>
-          <p class="text-gray-600 text-lg">Sistem Informasi Sekolah Modern</p>
+          <p class="text-gray-600 text-lg">Sistem Informasi Sekolah Monitoring</p>
         </div>
         <form class="space-y-6" action="/masuk" method="POST"> 
           @csrf
