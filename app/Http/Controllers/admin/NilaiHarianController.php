@@ -28,7 +28,6 @@ class NilaiHarianController extends Controller
         $mapelId = $request->get('mapel_id');
         $bulan = $request->get('bulan', date('Y-m'));
         
-        $mapelOptions = collect();
         $nilaiHarian = collect();
         $statistics = [];
         
@@ -39,7 +38,7 @@ class NilaiHarianController extends Controller
                     $q->where('kelas_id', $kelasId)
                       ->where('status', 'aktif');
                 });
-            })->get();
+            })->orderBy('mapel')->get();
             
             // Build query for grades
             $nilaiQuery = NilaiHarian::with(['siswa', 'guru', 'mapel'])
@@ -77,17 +76,20 @@ class NilaiHarianController extends Controller
                 
                 $statistics['per_siswa'] = $statisticsPerSiswa;
             }
+        } else {
+            // Jika belum ada kelas yang dipilih, tampilkan semua mata pelajaran
+            $mapelOptions = Mapel::orderBy('mapel')->get();
         }
         
         return view('admin.nilai-harian.index', compact(
             'kelasOptions',
             'mapelOptions', 
             'nilaiHarian',
-            'statistics',  // ← Nama variabel: statistics
+            'statistics',
             'kelasId',
             'mapelId',
             'bulan'
-        ))->with('kelas', $kelasOptions)->with('mapels', $mapelOptions);
+        ));
     }
     
     public function laporan(Request $request)
@@ -177,11 +179,13 @@ class NilaiHarianController extends Controller
         try {
             // Validasi parameter
             $kelasId = $request->get('kelas_id');
+            $mapelId = $request->get('mapel_id');
+            $bulan = $request->get('bulan', date('Y-m'));
             $semester = $request->get('semester');
             $tahunAjaran = $request->get('tahun_ajaran');
             
-            if (!$kelasId || !$semester || !$tahunAjaran) {
-                return redirect()->back()->with('error', 'Parameter filter tidak lengkap');
+            if (!$kelasId) {
+                return redirect()->back()->with('error', 'Parameter kelas harus dipilih');
             }
             
             // Ambil data kelas
@@ -195,8 +199,18 @@ class NilaiHarianController extends Controller
                 ->orderBy('nama')
                 ->get();
             
-            // Ambil semua mata pelajaran
-            $mapelList = Mapel::orderBy('nama_mapel')->get();
+            // Ambil mata pelajaran yang diajarkan di kelas ini
+            $mapelList = Mapel::whereHas('gurus', function($query) use ($kelasId) {
+                $query->whereHas('jadwals', function($q) use ($kelasId) {
+                    $q->where('kelas_id', $kelasId)
+                      ->where('status', 'aktif');
+                });
+            })->orderBy('mapel')->get();
+            
+            // Jika ada filter mapel tertentu
+            if ($mapelId) {
+                $mapelList = $mapelList->where('mapel_id', $mapelId);
+            }
             
             // Buat spreadsheet
             $spreadsheet = new Spreadsheet();
@@ -205,17 +219,22 @@ class NilaiHarianController extends Controller
             // Set judul
             $sheet->setCellValue('A1', 'LAPORAN NILAI HARIAN');
             $sheet->setCellValue('A2', 'Kelas: ' . $kelas->nama_kelas);
-            $sheet->setCellValue('A3', 'Semester: ' . $semester);
-            $sheet->setCellValue('A4', 'Tahun Ajaran: ' . $tahunAjaran);
+            $sheet->setCellValue('A3', 'Periode: ' . \Carbon\Carbon::parse($bulan)->format('F Y'));
+            if ($semester) {
+                $sheet->setCellValue('A4', 'Semester: ' . $semester);
+            }
+            if ($tahunAjaran) {
+                $sheet->setCellValue('A5', 'Tahun Ajaran: ' . $tahunAjaran);
+            }
             
             // Header tabel
-            $row = 6;
+            $row = $semester || $tahunAjaran ? 7 : 5;
             $sheet->setCellValue('A' . $row, 'No');
             $sheet->setCellValue('B' . $row, 'Nama Siswa');
             
             $col = 'C';
             foreach ($mapelList as $mapel) {
-                $sheet->setCellValue($col . $row, $mapel->nama_mapel);
+                $sheet->setCellValue($col . $row, $mapel->mapel);
                 $col++;
             }
             $sheet->setCellValue($col . $row, 'Rata-rata');
@@ -232,12 +251,28 @@ class NilaiHarianController extends Controller
                 $col = 'C';
                 
                 foreach ($mapelList as $mapel) {
-                    $rataRata = NilaiHarian::getRataRataNilai(
-                        $siswa->siswa_id, 
-                        $mapel->mapel_id, 
-                        $semester, 
-                        $tahunAjaran
-                    );
+                    // Query nilai berdasarkan parameter yang tersedia
+                    $nilaiQuery = NilaiHarian::where('siswa_id', $siswa->siswa_id)
+                        ->where('mapel_id', $mapel->mapel_id)
+                        ->where('kelas_id', $kelasId);
+                    
+                    // Filter berdasarkan bulan jika ada
+                    if ($bulan) {
+                        $nilaiQuery->whereYear('tanggal', \Carbon\Carbon::parse($bulan)->year)
+                                  ->whereMonth('tanggal', \Carbon\Carbon::parse($bulan)->month);
+                    }
+                    
+                    // Filter berdasarkan semester jika ada
+                    if ($semester) {
+                        $nilaiQuery->where('semester', $semester);
+                    }
+                    
+                    // Filter berdasarkan tahun ajaran jika ada
+                    if ($tahunAjaran) {
+                        $nilaiQuery->where('tahun_ajaran', $tahunAjaran);
+                    }
+                    
+                    $rataRata = $nilaiQuery->avg('nilai');
                     
                     if ($rataRata) {
                         $sheet->setCellValue($col . $row, number_format($rataRata, 1));
@@ -257,7 +292,8 @@ class NilaiHarianController extends Controller
             }
             
             // Style header
-            $headerRange = 'A6:' . $col . '6';
+            $headerRow = $semester || $tahunAjaran ? 7 : 5;
+            $headerRange = 'A' . $headerRow . ':' . $col . $headerRow;
             $sheet->getStyle($headerRange)->getFont()->setBold(true);
             $sheet->getStyle($headerRange)->getFill()
                 ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
@@ -269,7 +305,7 @@ class NilaiHarianController extends Controller
             }
             
             // Download file
-            $filename = 'Laporan_Nilai_Harian_' . $kelas->nama_kelas . '_' . $semester . '_' . $tahunAjaran . '.xlsx';
+            $filename = 'Laporan_Nilai_Harian_' . $kelas->nama_kelas . '_' . \Carbon\Carbon::parse($bulan)->format('Y_m') . '.xlsx';
             
             $writer = new Xlsx($spreadsheet);
             

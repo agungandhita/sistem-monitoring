@@ -7,6 +7,7 @@ use App\Models\Siswa;
 use App\Models\Wali;
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\NilaiHarian; // Tambahkan import ini
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -86,8 +87,40 @@ class SiswaController extends Controller
      */
     public function show(Siswa $siswa)
     {
-        $siswa->load('walis.user');
-        return view('admin.siswa.show', compact('siswa'));
+        $siswa->load(['walis.user', 'kelas']);
+        
+        // Ambil data nilai harian siswa (10 nilai terbaru)
+        $nilaiHarian = NilaiHarian::where('siswa_id', $siswa->siswa_id)
+            ->with(['mapel', 'guru'])
+            ->orderBy('tanggal', 'desc')
+            ->limit(10)
+            ->get();
+        
+        // Hitung statistik akademik keseluruhan
+        $allNilai = NilaiHarian::where('siswa_id', $siswa->siswa_id)->get();
+        
+        $statistikAkademik = [
+            'total_nilai' => $allNilai->count(),
+            'rata_rata_keseluruhan' => $allNilai->count() > 0 ? $allNilai->avg('nilai') : 0,
+            'nilai_tertinggi' => $allNilai->count() > 0 ? $allNilai->max('nilai') : 0,
+            'nilai_terendah' => $allNilai->count() > 0 ? $allNilai->min('nilai') : 0,
+        ];
+        
+        // Hitung rata-rata per mata pelajaran
+        $rataRataPerMapel = NilaiHarian::select(
+                'mapel_id',
+                DB::raw('AVG(nilai) as rata_rata'),
+                DB::raw('COUNT(*) as total_nilai'),
+                DB::raw('MIN(nilai) as nilai_terendah'),
+                DB::raw('MAX(nilai) as nilai_tertinggi')
+            )
+            ->where('siswa_id', $siswa->siswa_id)
+            ->with('mapel')
+            ->groupBy('mapel_id')
+            ->orderBy('rata_rata', 'desc')
+            ->get();
+        
+        return view('admin.siswa.show', compact('siswa', 'nilaiHarian', 'statistikAkademik', 'rataRataPerMapel'));
     }
 
     /**

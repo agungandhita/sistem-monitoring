@@ -37,7 +37,7 @@
                         <option value="">Semua Mata Pelajaran</option>
                         @foreach($mapelOptions as $mapel)
                             <option value="{{ $mapel->mapel_id }}" {{ request('mapel_id') == $mapel->mapel_id ? 'selected' : '' }}>
-                                {{ $mapenama_mapel }}
+                                {{ $mapel->mapel }}
                             </option>
                         @endforeach
                     </select>
@@ -152,7 +152,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ \Carbon\Carbon::parse($nilai->tanggal)->format('d/m/Y') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $nilai->siswa->nama }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $nilai->mapel->nama_mapel }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $nilai->mapel->mapel }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                                 {{ $nilai->jenis_penilaian }}

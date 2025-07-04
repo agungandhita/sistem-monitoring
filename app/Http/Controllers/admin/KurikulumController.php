@@ -55,10 +55,37 @@ class KurikulumController extends Controller
      */
     public function show(Kurikulum $kurikulum)
     {
-        $kurikulum->load('gurus', 'mapels');
+        // Load relasi dengan eager loading yang optimal
+        $kurikulum->load([
+            'gurus' => function($query) {
+                $query->withPivot('kelas_id', 'mapel_id');
+            },
+            'mapelsPivot' => function($query) {
+                $query->withPivot('kelas_id', 'guru_id');
+            }
+        ]);
+        
+        // Ambil semua kelas_id yang digunakan untuk optimasi
+        $kelasIds = collect();
+        foreach($kurikulum->gurus as $guru) {
+            if($guru->pivot && $guru->pivot->kelas_id) {
+                $kelasIds->push($guru->pivot->kelas_id);
+            }
+        }
+        foreach($kurikulum->mapelsPivot as $mapel) {
+            if($mapel->pivot && $mapel->pivot->kelas_id) {
+                $kelasIds->push($mapel->pivot->kelas_id);
+            }
+        }
+        
+        // Load semua kelas sekaligus untuk efisiensi
+        $kelasData = \App\Models\Kelas::whereIn('kelas_id', $kelasIds->unique())
+                                       ->pluck('nama_kelas', 'kelas_id');
+        
         $gurus = $kurikulum->gurus;
-        $mapels = $kurikulum->mapels;
-        return view('admin.kurikulum.show', compact('kurikulum', 'gurus', 'mapels'));
+        $mapels = $kurikulum->mapelsPivot;
+        
+        return view('admin.kurikulum.show', compact('kurikulum', 'gurus', 'mapels', 'kelasData'));
     }
 
     /**

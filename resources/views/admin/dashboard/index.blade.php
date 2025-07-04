@@ -140,7 +140,7 @@
                     <div class="space-y-3">
                         @foreach($siswaByKelas as $data)
                         <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                            <span class="text-sm font-medium text-gray-700">Kelas {{ $data->kelas }}</span>
+                            <span class="text-sm font-medium text-gray-700">Kelas {{ $data->nama_kelas }}</span>
                             <span class="text-sm font-bold text-blue-600">{{ $data->count }} siswa</span>
                         </div>
                         @endforeach

@@ -2,7 +2,7 @@
 
 
 @section('container')
-<div class="p-6">
+<div class="p-6 min-h-screen">
     <!-- Header -->
     <div class="mb-8">
         <div class="flex items-center justify-between">

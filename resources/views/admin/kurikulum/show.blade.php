@@ -155,7 +155,17 @@
                     <div class="ml-4 flex-1">
                         <p class="text-sm font-medium text-gray-600">Total Kelas</p>
                         <p class="text-2xl font-bold text-gray-900">
-                            {{ $kurikulum->gurus ? $kurikulum->gurus->pluck('pivot.kelas')->filter()->unique()->count() : 0 }}
+                            @php
+                                $kelasIds = collect();
+                                if($kurikulum->gurus) {
+                                    foreach($kurikulum->gurus as $guru) {
+                                        if($guru->pivot && $guru->pivot->kelas_id) {
+                                            $kelasIds->push($guru->pivot->kelas_id);
+                                        }
+                                    }
+                                }
+                                echo $kelasIds->unique()->count();
+                            @endphp
                         </p>
                         <p class="text-xs text-blue-600 mt-1">Kelas aktif</p>
                     </div>
@@ -243,11 +253,11 @@
                                             <div class="flex items-center">
                                                 <div class="flex-shrink-0 h-10 w-10">
                                                     <div class="h-10 w-10 rounded-full bg-gradient-to-r from-green-400 to-green-600 flex items-center justify-center">
-                                                        <span class="text-sm font-medium text-white">{{ substr($guru->nama_guru, 0, 1) }}</span>
+                                                        <span class="text-sm font-medium text-white">{{ substr($guru->nama, 0, 1) }}</span>
                                                     </div>
                                                 </div>
                                                 <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900">{{ $guru->nama_guru }}</div>
+                                                    <div class="text-sm font-medium text-gray-900">{{ $guru->nama }}</div>
                                                     <div class="text-sm text-gray-500">Guru</div>
                                                 </div>
                                             </div>
@@ -256,12 +266,12 @@
                                             <div class="text-sm text-gray-900 font-mono">{{ $guru->nip }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900 font-mono">{{ $guru->email }}</div>
+                                            <div class="text-sm text-gray-900">{{ $guru->email }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            @if($guru->pivot && $guru->pivot->kelas)
+                                            @if($guru->pivot && $guru->pivot->kelas_id)
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                    {{ $guru->pivot->kelas }}
+                                                    {{ $kelasData[$guru->pivot->kelas_id] ?? 'Kelas tidak ditemukan' }}
                                                 </span>
                                             @else
                                                 <span class="text-gray-400 text-sm">-</span>
@@ -325,11 +335,11 @@
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-8 w-8">
                                                 <div class="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center">
-                                                    <span class="text-sm font-medium text-purple-600">{{ substr($mapel->nama_mapel, 0, 1) }}</span>
+                                                    <span class="text-sm font-medium text-purple-600">{{ substr($mapel->mapel, 0, 1) }}</span>
                                                 </div>
                                             </div>
                                             <div class="ml-3">
-                                                <div class="text-sm font-medium text-gray-900">{{ $mapel->nama_mapel }}</div>
+                                                <div class="text-sm font-medium text-gray-900">{{ $mapel->mapel }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -339,9 +349,9 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($mapel->pivot && $mapel->pivot->kelas)
+                                        @if($mapel->pivot && $mapel->pivot->kelas_id)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                {{ $mapel->pivot->kelas }}
+                                                {{ $kelasData[$mapel->pivot->kelas_id] ?? 'Kelas tidak ditemukan' }}
                                             </span>
                                         @else
                                             <span class="text-gray-400 text-sm">-</span>

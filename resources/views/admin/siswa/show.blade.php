@@ -112,16 +112,111 @@
                 </div>
             </div>
             
-            <!-- Academic Progress Section (Placeholder) -->
+            <!-- Academic Progress Section -->
             <div class="bg-gray-50 rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Progress Akademik</h3>
-                <div class="text-center py-8">
-                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                    <p class="text-gray-500">Data progress akademik akan ditampilkan di sini</p>
-                    <p class="text-sm text-gray-400 mt-2">Fitur ini dapat dikembangkan lebih lanjut</p>
-                </div>
+                
+                @if($statistikAkademik['total_nilai'] > 0)
+                    <!-- Overall Statistics -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-blue-600">{{ $statistikAkademik['total_nilai'] }}</div>
+                            <div class="text-sm text-gray-600">Total Nilai</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-green-600">{{ number_format($statistikAkademik['rata_rata_keseluruhan'], 1) }}</div>
+                            <div class="text-sm text-gray-600">Rata-rata</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-purple-600">{{ number_format($statistikAkademik['nilai_tertinggi'], 1) }}</div>
+                            <div class="text-sm text-gray-600">Tertinggi</div>
+                        </div>
+                        <div class="bg-white rounded-lg p-4 text-center">
+                            <div class="text-2xl font-bold text-orange-600">{{ number_format($statistikAkademik['nilai_terendah'], 1) }}</div>
+                            <div class="text-sm text-gray-600">Terendah</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Average per Subject -->
+                    @if($rataRataPerMapel->count() > 0)
+                    <div class="mb-6">
+                        <h4 class="font-medium text-gray-800 mb-3">Rata-rata per Mata Pelajaran</h4>
+                        <div class="space-y-2">
+                            @foreach($rataRataPerMapel as $rata)
+                                <div class="flex items-center justify-between bg-white rounded-lg p-3">
+                                    <div class="flex-1">
+                                        <div class="font-medium text-gray-900">{{ $rata->mapel->mapel }}</div>
+                                        <div class="text-sm text-gray-600">{{ $rata->total_nilai }} nilai</div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-lg font-bold 
+                                            @if($rata->rata_rata >= 85) text-green-600
+                                            @elseif($rata->rata_rata >= 75) text-blue-600
+                                            @elseif($rata->rata_rata >= 65) text-yellow-600
+                                            @else text-red-600 @endif">
+                                            {{ number_format($rata->rata_rata, 1) }}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            {{ number_format($rata->nilai_terendah, 1) }} - {{ number_format($rata->nilai_tertinggi, 1) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                    
+                    <!-- Recent Grades -->
+                    @if($nilaiHarian->count() > 0)
+                    <div>
+                        <h4 class="font-medium text-gray-800 mb-3">Nilai Terbaru</h4>
+                        <div class="bg-white rounded-lg overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mata Pelajaran</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nilai</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Guru</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach($nilaiHarian as $nilai)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 text-sm text-gray-900">{{ $nilai->tanggal->format('d/m/Y') }}</td>
+                                            <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ $nilai->mapel->mapel }}</td>
+                                            <td class="px-4 py-3 text-sm text-gray-600">{{ ucfirst($nilai->jenis_penilaian) }}</td>
+                                            <td class="px-4 py-3 text-sm">
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                                    @if($nilai->nilai >= 85) bg-green-100 text-green-800
+                                                    @elseif($nilai->nilai >= 75) bg-blue-100 text-blue-800
+                                                    @elseif($nilai->nilai >= 65) bg-yellow-100 text-yellow-800
+                                                    @else bg-red-100 text-red-800 @endif">
+                                                    {{ number_format($nilai->nilai, 1) }}
+                                                </span>
+                                            </td>
+                                            <td class="px-4 py-3 text-sm text-gray-600">{{ $nilai->guru->nama }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+                    
+                @else
+                    <!-- Empty State -->
+                    <div class="text-center py-8">
+                        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <p class="text-gray-500">Belum ada data nilai untuk siswa ini</p>
+                        <p class="text-sm text-gray-400 mt-2">Data akan muncul setelah guru menginput nilai</p>
+                    </div>
+                @endif
             </div>
         </div>
         

@@ -22,7 +22,7 @@
         <div class="lg:col-span-1">
             <div class="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-lg p-6 text-center">
                 @if($guru->foto)
-                    <img src="{{ asset('storage/' . $guru->foto) }}" alt="{{ $guru->nama }}" 
+                    <img src="{{ asset('/public' . $guru->foto) }}" alt="{{ $guru->nama }}" 
                          class="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-white shadow-lg">
                 @else
                     <div class="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center border-4 border-white shadow-lg">
