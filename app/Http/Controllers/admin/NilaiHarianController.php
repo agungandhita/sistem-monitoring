@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\NilaiHarian;
 use App\Models\Kelas;
 use App\Models\Mapel;
 use App\Models\Siswa;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use App\Models\NilaiHarian;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class NilaiHarianController extends Controller
 {
@@ -79,9 +81,9 @@ class NilaiHarianController extends Controller
         
         return view('admin.nilai-harian.index', compact(
             'kelasOptions',
-            'mapelOptions',
+            'mapelOptions', 
             'nilaiHarian',
-            'statistics',
+            'statistics',  // ← Nama variabel: statistics
             'kelasId',
             'mapelId',
             'bulan'
@@ -172,38 +174,113 @@ class NilaiHarianController extends Controller
     
     public function export(Request $request)
     {
-        // This method can be implemented later for Excel/PDF export
-        // For now, return JSON data
-        
-        $kelasId = $request->get('kelas_id');
-        $semester = $request->get('semester');
-        $tahunAjaran = $request->get('tahun_ajaran');
-        
-        if (!$kelasId) {
-            return response()->json(['error' => 'Kelas harus dipilih'], 400);
-        }
-        
-        $kelas = Kelas::findOrFail($kelasId);
-        
-        $data = NilaiHarian::with(['siswa', 'guru', 'mapel'])
-            ->where('kelas_id', $kelasId)
-            ->when($semester, function($q) use ($semester) {
-                return $q->where('semester', $semester);
-            })
-            ->when($tahunAjaran, function($q) use ($tahunAjaran) {
-                return $q->where('tahun_ajaran', $tahunAjaran);
-            })
-            ->orderBy('tanggal', 'desc')
-            ->get();
+        try {
+            // Validasi parameter
+            $kelasId = $request->get('kelas_id');
+            $semester = $request->get('semester');
+            $tahunAjaran = $request->get('tahun_ajaran');
             
-        return response()->json([
-            'kelas' => $kelas,
-            'data' => $data,
-            'total' => $data->count(),
-            'filters' => [
-                'semester' => $semester,
-                'tahun_ajaran' => $tahunAjaran
-            ]
-        ]);
+            if (!$kelasId || !$semester || !$tahunAjaran) {
+                return redirect()->back()->with('error', 'Parameter filter tidak lengkap');
+            }
+            
+            // Ambil data kelas
+            $kelas = Kelas::find($kelasId);
+            if (!$kelas) {
+                return redirect()->back()->with('error', 'Kelas tidak ditemukan');
+            }
+            
+            // Ambil data siswa dalam kelas
+            $siswaList = Siswa::where('kelas_id', $kelasId)
+                ->orderBy('nama')
+                ->get();
+            
+            // Ambil semua mata pelajaran
+            $mapelList = Mapel::orderBy('nama_mapel')->get();
+            
+            // Buat spreadsheet
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            
+            // Set judul
+            $sheet->setCellValue('A1', 'LAPORAN NILAI HARIAN');
+            $sheet->setCellValue('A2', 'Kelas: ' . $kelas->nama_kelas);
+            $sheet->setCellValue('A3', 'Semester: ' . $semester);
+            $sheet->setCellValue('A4', 'Tahun Ajaran: ' . $tahunAjaran);
+            
+            // Header tabel
+            $row = 6;
+            $sheet->setCellValue('A' . $row, 'No');
+            $sheet->setCellValue('B' . $row, 'Nama Siswa');
+            
+            $col = 'C';
+            foreach ($mapelList as $mapel) {
+                $sheet->setCellValue($col . $row, $mapel->nama_mapel);
+                $col++;
+            }
+            $sheet->setCellValue($col . $row, 'Rata-rata');
+            
+            // Data siswa
+            $row++;
+            $no = 1;
+            foreach ($siswaList as $siswa) {
+                $sheet->setCellValue('A' . $row, $no++);
+                $sheet->setCellValue('B' . $row, $siswa->nama);
+                
+                $totalNilai = 0;
+                $jumlahMapel = 0;
+                $col = 'C';
+                
+                foreach ($mapelList as $mapel) {
+                    $rataRata = NilaiHarian::getRataRataNilai(
+                        $siswa->siswa_id, 
+                        $mapel->mapel_id, 
+                        $semester, 
+                        $tahunAjaran
+                    );
+                    
+                    if ($rataRata) {
+                        $sheet->setCellValue($col . $row, number_format($rataRata, 1));
+                        $totalNilai += $rataRata;
+                        $jumlahMapel++;
+                    } else {
+                        $sheet->setCellValue($col . $row, '-');
+                    }
+                    $col++;
+                }
+                
+                // Rata-rata keseluruhan
+                $rataKeseluruhan = $jumlahMapel > 0 ? $totalNilai / $jumlahMapel : 0;
+                $sheet->setCellValue($col . $row, number_format($rataKeseluruhan, 1));
+                
+                $row++;
+            }
+            
+            // Style header
+            $headerRange = 'A6:' . $col . '6';
+            $sheet->getStyle($headerRange)->getFont()->setBold(true);
+            $sheet->getStyle($headerRange)->getFill()
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setRGB('CCCCCC');
+            
+            // Auto width
+            foreach (range('A', $col) as $column) {
+                $sheet->getColumnDimension($column)->setAutoSize(true);
+            }
+            
+            // Download file
+            $filename = 'Laporan_Nilai_Harian_' . $kelas->nama_kelas . '_' . $semester . '_' . $tahunAjaran . '.xlsx';
+            
+            $writer = new Xlsx($spreadsheet);
+            
+            return Response::streamDownload(function() use ($writer) {
+                $writer->save('php://output');
+            }, $filename, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            ]);
+            
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor data: ' . $e->getMessage());
+        }
     }
 }

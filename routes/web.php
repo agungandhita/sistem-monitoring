@@ -185,10 +185,3 @@ Route::middleware(['auth:guru'])->group(function () {
     Route::get('/catatan-perkembangan/{siswa}', [CatatanPerkembanganController::class, 'show'])->name('guru.catatan-perkembangan.show');
 });
 
-
-// Routes untuk Wali
-
-
- 
-    
-  
