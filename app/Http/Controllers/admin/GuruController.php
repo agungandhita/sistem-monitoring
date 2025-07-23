@@ -37,6 +37,7 @@ class GuruController extends Controller
             'nuptk' => 'nullable|string|max:20|unique:gurus,nuptk',
             'nip' => 'nullable|string|max:20|unique:gurus,nip',
             'nama' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|in:laki-laki,perempuan',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'alamat' => 'required|string',
             'tanggal_lahir' => 'required|date',
@@ -49,7 +50,7 @@ class GuruController extends Controller
 
         try {
             $data = $request->only([
-                'nuptk', 'nip', 'nama', 'alamat', 'tanggal_lahir',
+                'nuptk', 'nip', 'nama', 'jenis_kelamin', 'alamat', 'tanggal_lahir',
                 'nomor_hp', 'email', 'jabatan', 'tahun_masuk'
             ]);
             
@@ -98,6 +99,7 @@ class GuruController extends Controller
             'nuptk' => 'nullable|string|max:20|unique:gurus,nuptk,' . $guru->guru_id . ',guru_id',
             'nip' => 'nullable|string|max:20|unique:gurus,nip,' . $guru->guru_id . ',guru_id',
             'nama' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|in:laki-laki,perempuan',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'alamat' => 'required|string',
             'tanggal_lahir' => 'required|date',
@@ -110,7 +112,7 @@ class GuruController extends Controller
 
         try {
             $data = $request->only([
-                'nuptk', 'nip', 'nama', 'alamat', 'tanggal_lahir',
+                'nuptk', 'nip', 'nama', 'jenis_kelamin', 'alamat', 'tanggal_lahir',
                 'nomor_hp', 'email', 'jabatan', 'tahun_masuk'
             ]);
             

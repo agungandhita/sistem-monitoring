@@ -63,6 +63,10 @@
                         <p class="text-gray-800 font-medium">{{ $guru->nama }}</p>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-lg">
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Jenis Kelamin</label>
+                        <p class="text-gray-800 font-medium">{{ ucfirst($guru->jenis_kelamin) }}</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
                         <label class="block text-sm font-medium text-gray-600 mb-1">Tanggal Lahir</label>
                         <p class="text-gray-800 font-medium">
                             {{ $guru->tanggal_lahir ? \Carbon\Carbon::parse($guru->tanggal_lahir)->format('d F Y') : '-' }}

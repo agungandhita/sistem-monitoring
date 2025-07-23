@@ -17,6 +17,7 @@ class Guru extends Authenticatable
         'nuptk',
         'nip',
         'nama',
+        'jenis_kelamin',
         'foto',
         'alamat',
         'tanggal_lahir',

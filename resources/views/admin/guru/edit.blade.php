@@ -38,14 +38,26 @@
             </div>
             
             <div>
-                <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap *</label>
-                <input type="text" name="nama" id="nama" value="{{ old('nama', $guru->nama) }}" 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('nama') border-red-500 @enderror" 
-                       placeholder="Nama lengkap guru" required>
-                @error('nama')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
+                 <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap *</label>
+                 <input type="text" name="nama" id="nama" value="{{ old('nama', $guru->nama) }}" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('nama') border-red-500 @enderror" required>
+                 @error('nama')
+                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                 @enderror
+             </div>
+             
+             <div>
+                 <label for="jenis_kelamin" class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin *</label>
+                 <select name="jenis_kelamin" id="jenis_kelamin" 
+                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 @error('jenis_kelamin') border-red-500 @enderror" required>
+                     <option value="">Pilih Jenis Kelamin</option>
+                     <option value="laki-laki" {{ old('jenis_kelamin', $guru->jenis_kelamin) == 'laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                     <option value="perempuan" {{ old('jenis_kelamin', $guru->jenis_kelamin) == 'perempuan' ? 'selected' : '' }}>Perempuan</option>
+                 </select>
+                 @error('jenis_kelamin')
+                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                 @enderror
+             </div>
             
             <div>
                 <label for="foto" class="block text-sm font-medium text-gray-700 mb-2">Foto</label>

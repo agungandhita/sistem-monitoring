@@ -25,6 +25,11 @@
                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
         </div>
         <div class="flex gap-2">
+            <select id="jenisKelaminFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <option value="">Semua Jenis Kelamin</option>
+                <option value="laki-laki">Laki-laki</option>
+                <option value="perempuan">Perempuan</option>
+            </select>
             <select id="jabatanFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                 <option value="">Semua Jabatan</option>
                 @foreach($gurus->pluck('jabatan')->unique() as $jabatan)
@@ -48,6 +53,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Foto</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis Kelamin</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">NIP/NUPTK</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -60,6 +66,7 @@
                 <tr class="hover:bg-gray-50 transition duration-200" 
                     data-jabatan="{{ $guru->jabatan }}" 
                     data-tahun="{{ $guru->tahun_masuk }}" 
+                    data-jenis-kelamin="{{ $guru->jenis_kelamin }}" 
                     data-nama="{{ strtolower($guru->nama) }}">
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {{ $gurus->firstItem() + $index }}
@@ -82,6 +89,11 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="text-sm font-medium text-gray-900">{{ $guru->nama }}</div>
                         <div class="text-sm text-gray-500">{{ $guru->nomor_hp }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $guru->jenis_kelamin == 'laki-laki' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800' }}">
+                            {{ ucfirst($guru->jenis_kelamin) }}
+                        </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         @if($guru->nip)
@@ -202,6 +214,10 @@
     });
 
     // Filter functionality
+    document.getElementById('jenisKelaminFilter').addEventListener('change', function() {
+        filterTable();
+    });
+    
     document.getElementById('jabatanFilter').addEventListener('change', function() {
         filterTable();
     });
@@ -212,20 +228,23 @@
 
     function filterTable() {
         const searchValue = document.getElementById('searchInput').value.toLowerCase();
+        const jenisKelaminValue = document.getElementById('jenisKelaminFilter').value;
         const jabatanValue = document.getElementById('jabatanFilter').value;
         const tahunValue = document.getElementById('tahunFilter').value;
         const rows = document.querySelectorAll('#guruTableBody tr');
 
         rows.forEach(row => {
             const nama = row.getAttribute('data-nama') || '';
+            const jenisKelamin = row.getAttribute('data-jenis-kelamin') || '';
             const jabatan = row.getAttribute('data-jabatan') || '';
             const tahun = row.getAttribute('data-tahun') || '';
 
             const matchesSearch = nama.includes(searchValue);
+            const matchesJenisKelamin = jenisKelaminValue === '' || jenisKelamin === jenisKelaminValue;
             const matchesJabatan = jabatanValue === '' || jabatan === jabatanValue;
             const matchesTahun = tahunValue === '' || tahun === tahunValue;
 
-            if (matchesSearch && matchesJabatan && matchesTahun) {
+            if (matchesSearch && matchesJenisKelamin && matchesJabatan && matchesTahun) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';
