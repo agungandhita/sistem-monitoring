@@ -12,7 +12,9 @@
         </div>
         <div class="text-center mb-8">
           <h1 class="text-gray-800 text-4xl font-bold mb-2">SISMO</h1>
-          <p class="text-gray-600 text-lg">Sistem Informasi Sekolah Monitoring</p>
+          <p class="text-gray-600 text-lg">Sistem Informasi Monitoring</p>
+          <p class="text-gray-600 text-lg font-bold">MI Muhammadiyah 4 Latek</p>
+
         </div>
         <form class="space-y-6" action="/masuk" method="POST"> 
           @csrf
@@ -100,7 +102,7 @@
                 <img src="{{ asset('img/gambar.jpg') }}" alt="Foto Lembaga" class="absolute inset-0 w-full h-full object-cover z-0">
                 <div class="absolute inset-0 bg-gradient-to-br from-gray-900/60 to-gray-800/60 z-10"></div>
                 <div class="absolute bottom-6 left-6 right-6 z-20">
-                    <h3 class="text-white text-xl font-bold mb-2">Madrasah Ibtidaiyah Muhammadiyah</h3>
+                    <h3 class="text-white text-xl font-bold mb-2">Madrasah Ibtidaiyah Muhammadiyah 4 Latek</h3>
                     <p class="text-gray-200 text-sm">Pendidikan Berkualitas dengan Nilai-Nilai Islami</p>
                 </div>
             </div>
