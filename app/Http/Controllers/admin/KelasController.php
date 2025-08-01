@@ -73,9 +73,8 @@ class KelasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)  // Hapus parameter Kelas $kelas yang duplikat
+    public function edit(Kelas $kelas)
     {
-        $kelas = Kelas::findOrFail($id); // Ambil data berdasarkan ID
         $kurikulums = Kurikulum::all();
         return view('admin.kelas.edit', compact('kelas', 'kurikulums'));
     }

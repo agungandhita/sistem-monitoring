@@ -12,6 +12,14 @@ class Siswa extends Model
     protected $table = 'siswas';
     protected $primaryKey = 'siswa_id';
     
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'siswa_id';
+    }
+    
     protected $fillable = [
         'nis',
         'nama',

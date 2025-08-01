@@ -255,7 +255,7 @@
     // Delete confirmation
     function confirmDelete(guruId) {
         const form = document.getElementById('deleteForm');
-        form.action = `/admin/guru/${guruId}`;
+        form.action = `{{ route('admin.guru.destroy', '') }}/${guruId}`;
         document.getElementById('deleteModal').classList.remove('hidden');
     }
 

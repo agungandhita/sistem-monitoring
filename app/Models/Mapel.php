@@ -12,6 +12,14 @@ class Mapel extends Model
     protected $table = 'mapels';
     protected $primaryKey = 'mapel_id';
     
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'mapel_id';
+    }
+    
     protected $fillable = [
         'kode_mapel',
         'mapel',

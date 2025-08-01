@@ -242,7 +242,7 @@ function filterTable() {
 
 // Delete confirmation
 function confirmDelete(siswaId) {
-    document.getElementById('deleteForm').action = `/admin/siswa/${siswaId}`;
+    document.getElementById('deleteForm').action = `{{ route('admin.siswa.destroy', '') }}/${siswaId}`;
     document.getElementById('deleteModal').classList.remove('hidden');
 }
 

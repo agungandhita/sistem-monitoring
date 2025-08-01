@@ -37,6 +37,14 @@ class Guru extends Authenticatable
         'password'
     ];
     
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'guru_id';
+    }
+    
     // Many-to-many relationship with Mapel through guru_mapel pivot table
     public function mapels()
     {

@@ -257,7 +257,7 @@
     // Delete confirmation
     function confirmDelete(mapelId, mapelName) {
         document.getElementById('deleteMapelName').textContent = mapelName;
-        document.getElementById('deleteForm').action = `/admin/mapel/${mapelId}`;
+        document.getElementById('deleteForm').action = `{{ route('admin.mapel.destroy', '') }}/${mapelId}`;
         document.getElementById('deleteModal').classList.remove('hidden');
         document.getElementById('deleteModal').classList.add('flex');
     }

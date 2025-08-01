@@ -249,7 +249,7 @@
     function confirmDelete(kelasId, namaKelas, tahunAjaran) {
         document.getElementById('deleteMessage').textContent = 
             `Apakah Anda yakin ingin menghapus kelas ${namaKelas} (${tahunAjaran})? Tindakan ini tidak dapat dibatalkan.`;
-        document.getElementById('deleteForm').action = `/admin/kelas/${kelasId}`;
+        document.getElementById('deleteForm').action = `{{ route('admin.kelas.destroy', '') }}/${kelasId}`;
         document.getElementById('deleteModal').classList.remove('hidden');
     }
 

@@ -12,6 +12,14 @@ class Kelas extends Model
     protected $table = 'kelas';
     protected $primaryKey = 'kelas_id';
     
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'kelas_id';
+    }
+    
     protected $fillable = [
         'nama_kelas',
         'tingkat',
@@ -20,10 +28,6 @@ class Kelas extends Model
         'kapasitas',
         'status'
     ];
-    public function getRouteKeyName()
-    {
-        return 'kelas_id'; // Sesuaikan dengan primary key Anda
-    }
     // Relationship with Kurikulum (Many-to-One)
     public function kurikulum()
     {

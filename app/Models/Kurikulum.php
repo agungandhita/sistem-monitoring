@@ -12,6 +12,14 @@ class Kurikulum extends Model
     protected $table = 'kurikulums';
     protected $primaryKey = 'kurikulum_id';
     
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'kurikulum_id';
+    }
+    
     protected $fillable = [
         'nama_kurikulum',
         'tahun_ajaran'

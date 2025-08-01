@@ -320,7 +320,7 @@
                         Tindakan ini tidak dapat dibatalkan.`;
         
         document.getElementById('deleteMessage').innerHTML = message;
-        document.getElementById('deleteForm').action = `/admin/guru-mapel/${guruId}/${mapelId}/${kurikulumId}/${kelas}`;
+        document.getElementById('deleteForm').action = `{{ url('admin/guru-mapel') }}/${guruId}/${mapelId}/${kurikulumId}/${kelas}`;
         document.getElementById('deleteModal').classList.remove('hidden');
         document.getElementById('deleteModal').classList.add('flex');
     }
