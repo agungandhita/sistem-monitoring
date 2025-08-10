@@ -112,7 +112,6 @@ Route::middleware('admin')->group(function () {
         Route::put('/{guru_id}/{mapel_id}/{kurikulum_id}/{kelas}', [App\Http\Controllers\Admin\GuruMapelController::class, 'update'])->name('update');
         Route::delete('/{guru_id}/{mapel_id}/{kurikulum_id}/{kelas}', [App\Http\Controllers\Admin\GuruMapelController::class, 'destroy'])->name('destroy');
     });
-    
 
     // Curriculum Management Routes
     Route::resource('kurikulum', App\Http\Controllers\Admin\KurikulumController::class)->names([

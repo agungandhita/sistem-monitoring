@@ -52,19 +52,19 @@
         </div>
 
         <!-- Schedule -->
-        @if($jadwalsSorted->count() > 0)
-            <div class="space-y-6">
-                @foreach($jadwalsSorted as $hari => $jadwals)
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
-                            <h3 class="text-lg font-semibold text-gray-900 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                {{ $hari }}
-                            </h3>
-                        </div>
-                        
+        <div class="space-y-6">
+            @foreach($jadwalsSorted as $hari => $jadwals)
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            {{ $hari }}
+                        </h3>
+                    </div>
+                    
+                    @if($jadwals->count() > 0)
                         <div class="divide-y divide-gray-200">
                             @foreach($jadwals as $jadwal)
                                 <div class="p-6 hover:bg-gray-50 transition-colors duration-150">
@@ -120,21 +120,18 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <!-- Empty State -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-                <div class="p-12 text-center">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada jadwal</h3>
-                    <p class="mt-1 text-sm text-gray-500">Belum ada jadwal pelajaran untuk kelas ini.</p>
+                    @else
+                        <!-- No Schedule for This Day -->
+                        <div class="p-8 text-center">
+                            <svg class="mx-auto h-8 w-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-500">Tidak ada jadwal pelajaran</p>
+                        </div>
+                    @endif
                 </div>
-            </div>
-        @endif
+            @endforeach
+        </div>
     </div>
 </div>
 @endsection

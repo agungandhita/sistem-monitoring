@@ -27,17 +27,27 @@ class JadwalController extends Controller
         // Verify that the student is related to this wali
         $siswa = $wali->siswas()->with('kelas')->findOrFail($siswaId);
         
-        // Get schedule for this student's class
+        $tahunAjaran = $siswa->kelas->tahun_ajaran ?? '2024/2025';
+        
         $jadwals = Jadwal::where('kelas_id', $siswa->kelas_id)
-            ->where('tahun_ajaran', '2024/2025')
+            ->where('tahun_ajaran', $tahunAjaran)
             ->where('status', 'aktif')
             ->with(['mapel', 'guru'])
             ->orderBy('hari')
             ->orderBy('jam_ke')
             ->get();
         
+        // Define all days of the week in order
+        $allDays = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+        
         // Group schedules by day
-        $jadwalsSorted = $jadwals->groupBy('hari');
+        $jadwalsByDay = $jadwals->groupBy('hari');
+        
+        // Create sorted array with all days, including empty ones
+        $jadwalsSorted = collect();
+        foreach ($allDays as $day) {
+            $jadwalsSorted[$day] = $jadwalsByDay->get($day, collect());
+        }
         
         return view('wali.jadwal.show', compact('siswa', 'jadwalsSorted'));
     }
