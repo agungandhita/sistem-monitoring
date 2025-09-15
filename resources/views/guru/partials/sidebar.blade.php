@@ -12,7 +12,7 @@
                 </svg>
             </div>
             <div>
-                <h1 class="text-lg font-bold text-gray-800">SISMO</h1>
+                <h1 class="text-lg font-bold text-gray-800">SISFO</h1>
                 <p class="text-xs text-gray-500 -mt-1">Portal Guru</p>
             </div>
         </div>
